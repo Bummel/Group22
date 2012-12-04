@@ -15,7 +15,7 @@ public class FinancialManagement
 	protected LinkedList<RealAccountDataUpdateRequest> realAccounDataUpdateRequests;
 
 	@Deprecated
-	protected FinancialManagement(){}
+	public FinancialManagement(){}
 	
 	public FinancialManagement(TipTicketPrices tipTicketPrices, ReceiptsDistribution receiptsDistribution)
 	{
@@ -64,15 +64,15 @@ public class FinancialManagement
 		externalTransactions.add(transaction);
 	}
 
-	public void setCredit(BigDecimal credit){ this.credit = credit; }
+	public void setCredit(BigDecimal credit2){ this.credit = credit2; }
 	public void setTipTicketPrices(TipTicketPrices tipTicketPrices){ this.tipTicketPrices = tipTicketPrices; }
 	public void setReceiptsDistribution(ReceiptsDistribution receiptsDistribution){ this.receiptsDistribution = receiptsDistribution; }
 
-	public BigDecimal getCredit(){ return credit; }
+	public BigDecimal getCredit(){ return credit;}
 	public TipTicketPrices getTipTicketPrices() { return tipTicketPrices; }
 	public ReceiptsDistribution getReceiptsDistribution() { return receiptsDistribution; }
 	
 	public LinkedList<ExternalTransaction> getExternalTransactions() { return externalTransactions; }	
 	public LinkedList<InternalTransaction> getInternalTransactions() { return internalTransactions; }
-	public LinkedList<RealAccountDataUpdateRequest> getRealAccounDataUpdateRequests() { return realAccounDataUpdateRequests; }
+	public LinkedList<RealAccountDataUpdateRequest> getRealAccountDataUpdateRequests() { return realAccounDataUpdateRequests; }
 }

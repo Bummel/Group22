@@ -13,7 +13,7 @@ public class TipManagement
 	protected Duration tipSubmissionTimeLimit;
 	
 	@Deprecated
-	protected TipManagement(){}
+	public TipManagement(){}
 	
 	public TipManagement(long tipSubmissionTimeLimitInMilliSeconds)
 	{

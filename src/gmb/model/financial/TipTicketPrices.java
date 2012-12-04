@@ -16,7 +16,7 @@ public class TipTicketPrices
 	protected BigDecimal dailyLottoPTTPrice_Year;
 	
 	@Deprecated
-	protected TipTicketPrices(){}
+	public TipTicketPrices(){}
 	
 	public TipTicketPrices(BigDecimal weeklyLottoSTTPrice, BigDecimal totoSTTPrice, BigDecimal dailyLottoSTTPrice, 
 			BigDecimal weeklyLottoPTTPrice_Month, BigDecimal dailyLottoPTTPrice_Month,

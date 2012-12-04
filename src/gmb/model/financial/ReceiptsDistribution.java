@@ -8,7 +8,7 @@ public class ReceiptsDistribution
 	private int managementDue;
 	
 	@Deprecated
-	protected ReceiptsDistribution(){}
+	public ReceiptsDistribution(){}
 	
 	public ReceiptsDistribution(int winnersDue, int treasuryDue, int lotteryTaxDue, int managementDue)
 	{

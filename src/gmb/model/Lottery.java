@@ -22,7 +22,7 @@ public class Lottery
 	@Deprecated
 	private Lottery(){}
 	
-	private Lottery(FinancialManagement financialManagement, MemberManagement memberManagement, GroupManagement groupManagement, TipManagement tipManagement)
+	public Lottery(FinancialManagement financialManagement, MemberManagement memberManagement, GroupManagement groupManagement, TipManagement tipManagement)
 	{
 		this.financialManagement = financialManagement;
 		this.memberManagement = memberManagement;

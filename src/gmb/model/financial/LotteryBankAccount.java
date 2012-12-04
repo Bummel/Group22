@@ -19,7 +19,7 @@ public class LotteryBankAccount
 	protected LinkedList<RealAccountDataUpdateRequest> realAccounDataUpdateRequests;
 	
 	@Deprecated
-	protected LotteryBankAccount(){}
+	public LotteryBankAccount(){}
 	
 	public LotteryBankAccount(Customer owner, RealAccountData realAccountData)
 	{

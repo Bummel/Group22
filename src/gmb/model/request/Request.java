@@ -10,7 +10,7 @@ public class Request extends Notification
 	
 	//CONSTRUCTORS
 	@Deprecated
-	protected Request(){}
+	public Request(){}
 	
 	public Request(Member member, String note)
 	{
