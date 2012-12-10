@@ -13,7 +13,9 @@ import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.ManyToMany;
@@ -24,10 +26,10 @@ import org.salespointframework.core.user.Capability;
 @Entity
 public class Customer extends Member 
 {
-	@OneToOne(mappedBy="owner")
-	@JoinColumn(name="userIdentifier" , referencedColumnName="userIdentifier")
+	@OneToOne(cascade=CascadeType.ALL)
+	//@JoinColumn(name="userIdentifier" , referencedColumnName="userIdentifier")
 	protected LotteryBankAccount lotteryBankAccount;
-	@ManyToMany(mappedBy="groupMembers")
+	@ManyToMany
 	protected List<Group> groups;
 	
 	@OneToMany(mappedBy="owner")
