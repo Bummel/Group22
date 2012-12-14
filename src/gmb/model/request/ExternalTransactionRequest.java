@@ -1,8 +1,8 @@
 package gmb.model.request;
 
-import gmb.model.financial.ExternalTransaction;
 import gmb.model.financial.LotteryBankAccount;
 import gmb.model.financial.FinancialManagement;
+import gmb.model.financial.transaction.ExternalTransaction;
 
 import javax.persistence.Entity;
 import javax.persistence.Embedded;
@@ -30,6 +30,7 @@ public class ExternalTransactionRequest extends Request
 	}
 	
 	/**
+	 * [intended for direct usage by controller]
 	 * Return code:
 	 * 0 - successful
 	 * 1 - failed because state was not "UNHANDLED"

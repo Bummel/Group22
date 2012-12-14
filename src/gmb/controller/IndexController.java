@@ -11,13 +11,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import gmb.model.GmbPersistenceManager;
 import gmb.model.Lottery;
-import gmb.model.user.Admin;
-import gmb.model.user.Adress;
-import gmb.model.user.GroupManagement;
-import gmb.model.user.Member;
-import gmb.model.user.MemberData;
-import gmb.model.user.MemberManagement;
+import gmb.model.group.GroupManagement;
+import gmb.model.member.Admin;
+import gmb.model.member.Member;
+import gmb.model.member.MemberManagement;
+import gmb.model.member.container.Adress;
+import gmb.model.member.container.MemberData;
 
 	
 
@@ -29,6 +30,7 @@ import gmb.model.user.MemberManagement;
 			ModelAndView mav = new ModelAndView();
 
 			mav.addObject("userListe", Lottery.getInstance().getMemberManagement().getMembers());
+			mav.addObject("groupList", Lottery.getInstance().getGroupManagement().getGroups());
 			mav.setViewName("index");
 			return mav;
 	    }
@@ -36,29 +38,18 @@ import gmb.model.user.MemberManagement;
 
 		@RequestMapping("/index")
 		public String index2() {
-			EntityManagerFactory emf = Database.INSTANCE.getEntityManagerFactory();
-			EntityManager em = emf.createEntityManager();
-			
-			MemberManagement mm = new MemberManagement(0);
-			GroupManagement gm = new GroupManagement(0);
-			
-			Lottery.Instanciate(null,mm,gm,null);
 			
 			Adress a = new Adress("m","n","o","p");
 			DateTime d = new DateTime();
 			MemberData md = new MemberData("q","j",d,"k","l",a);
 			Admin user = new Admin("bobob","pw",md);
-			em.getTransaction().begin();
-			em.persist(a);
-			em.getTransaction().commit();
-			em.getTransaction().begin();
-			em.persist(md);
-			em.getTransaction().commit();
+
+			GmbPersistenceManager.add(a);
+			GmbPersistenceManager.add(md);
 			
 			Lottery.getInstance().getMemberManagement().addMember(user);
 			
-			Class<?> classtest= user.getClass();
-			System.out.printf(classtest.getSimpleName(), user);
+			GmbPersistenceManager.update(Lottery.getInstance().getMemberManagement());
 			
 			return "index";
 		}

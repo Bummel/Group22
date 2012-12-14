@@ -1,9 +1,11 @@
 package gmb.model;
 
-import gmb.model.user.Member;
-import gmb.model.user.MemberManagement;
-import gmb.model.user.GroupManagement;
 import gmb.model.financial.FinancialManagement;
+import gmb.model.group.Group;
+import gmb.model.group.GroupManagement;
+import gmb.model.member.Customer;
+import gmb.model.member.Member;
+import gmb.model.member.MemberManagement;
 import gmb.model.tip.TipManagement;
 
 import javax.persistence.EntityManager;
@@ -11,6 +13,7 @@ import javax.persistence.EntityManagerFactory;
 
 import org.salespointframework.core.database.Database;
 import org.salespointframework.core.user.PersistentUserManager;
+import org.salespointframework.core.user.UserIdentifier;
 
 public class GmbPersistenceManager 
 {	
@@ -24,7 +27,20 @@ public class GmbPersistenceManager
 	
 	public static void update(Member member){ pum.update(member); }
 	
+	public static Member get(UserIdentifier uid){ return pum.get(Member.class, uid); }
+	
 	public static Object get(Class<?> classType, int id){ return initContainer(classType, id); }
+	
+	public static PersiObject2 add(PersiObject2 obj)
+	{
+		EntityManager em = emf.createEntityManager();
+		
+		em.getTransaction().begin();
+		em.persist(obj);
+		em.getTransaction().commit();
+		
+		return em.find(obj.getClass(), obj.getId());
+	}
 	
 	public static void add(Object obj)
 	{
@@ -48,7 +64,7 @@ public class GmbPersistenceManager
 	{
 		EntityManager em = emf.createEntityManager();
 				
-		em.getTransaction();
+		em.getTransaction().begin();
 		em.merge(obj);
 		em.getTransaction().commit();
 	}
@@ -69,5 +85,27 @@ public class GmbPersistenceManager
 		
 		return em.find(classType, id);
 	}
+	
+	public static Group createGroup(String name, Customer groupAdmin, String infoText){
+		
+		Group g = new Group(name, groupAdmin, infoText);
+		
+		return (Group) GmbPersistenceManager.add(g);
+	}
 		
 }
+
+////dummy required for unit tests of model code
+/*
+public class GmbPersistenceManager 
+{		
+	public static void get(Class<?> classType, int id){}
+	
+	public static void add(Object obj){}
+	
+	public static void remove(Object obj){}
+	
+	public static void update(Object obj){}
+	
+	public static void initLottery(){}	
+}*/
