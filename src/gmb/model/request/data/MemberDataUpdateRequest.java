@@ -1,10 +1,12 @@
 package gmb.model.request.data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import gmb.model.Lottery;
 import gmb.model.member.Member;
 import gmb.model.member.MemberManagement;
 import gmb.model.member.container.MemberData;
@@ -18,6 +20,7 @@ public class MemberDataUpdateRequest extends Request
 	protected MemberData updatedData;
 	
 	@ManyToOne
+	@JoinColumn(name="memberManagementID")
 	protected MemberManagement memberManagementID;
 	
 	@Deprecated
@@ -27,6 +30,7 @@ public class MemberDataUpdateRequest extends Request
 	{
 		super(member, note);
 		this.updatedData = updatedData;
+		this.memberManagementID=Lottery.getInstance().getMemberManagement();
 	}
 	
 	/**

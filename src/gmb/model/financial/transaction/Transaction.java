@@ -8,19 +8,21 @@ import gmb.model.CDecimal;
 
 import org.joda.time.DateTime;
 
-import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 
-@Embeddable
+@Entity
 public abstract class Transaction extends PersiObject
 {
-	@OneToOne 
-    @JoinColumn(name="userIdentifier", referencedColumnName="userIdentifier")
+	@OneToOne(fetch=FetchType.EAGER)
 	protected Customer affectedCustomer; 
+	@Embedded
 	protected CDecimal amount;
 	@Temporal(value = TemporalType.TIMESTAMP)
 	protected Date date;

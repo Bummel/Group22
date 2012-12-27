@@ -1,5 +1,6 @@
 package gmb.model.financial;
 import gmb.model.GmbFactory;
+import gmb.model.GmbPersistenceManager;
 import gmb.model.PersiObject;
 import gmb.model.financial.container.Jackpots;
 import gmb.model.financial.container.LotteryCredits;
@@ -19,6 +20,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.ElementCollection;
@@ -26,33 +29,38 @@ import javax.persistence.ElementCollection;
 @Entity
 public class FinancialManagement extends PersiObject
 {	
-	@OneToOne(cascade = CascadeType.ALL)
-	LotteryCredits lotteryCredits;
+	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="LOTTERYCREDITS_PERSISTENCEID")
+	protected LotteryCredits lotteryCredits;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	Jackpots jackpots;
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="JACKPOTS_PERSISTENCEID")
+	protected Jackpots jackpots;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	PrizeCategories prizeCategories;
+	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="PRIZECATEGORIES_PERSISTENCEID")
+	protected PrizeCategories prizeCategories;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="TIPTICKETPRICES_PERSISTENCEID")
 	protected TipTicketPrices tipTicketPrices;
 
-	@OneToOne(mappedBy="financialManagementId")
+	@OneToOne
+	@JoinColumn(name="RECEIPTSDISTRIBUTION_PERSISTENCEID")
 	protected ReceiptsDistribution receiptsDistribution;
 
-	@OneToMany(mappedBy="financialManagementId")
+	@OneToMany
 	protected List<TicketPurchase> ticketPurchases;
 
-	@ElementCollection
+	@OneToMany
 	protected List<Winnings> winnings;
 
-	@ElementCollection
+	@OneToMany
 	protected List<ExternalTransaction> externalTransactions;
 
 	@OneToMany(mappedBy="financialManagementId")
 	protected List<ExternalTransactionRequest> externalTransactionRequests;	
-	@ElementCollection
+	@OneToMany
 	protected List<RealAccountDataUpdateRequest> realAccounDataUpdateRequests;
 
 	@Deprecated
@@ -61,7 +69,7 @@ public class FinancialManagement extends PersiObject
 	public FinancialManagement(TipTicketPrices tipTicketPrices, ReceiptsDistribution receiptsDistribution)
 	{	
 		lotteryCredits = GmbFactory.new_LotteryCredits();
-		jackpots = GmbFactory.new_Jackpots();
+		jackpots = new Jackpots(null);
 		prizeCategories = GmbFactory.new_PrizeCategories();
 
 		this.tipTicketPrices = tipTicketPrices;
@@ -73,13 +81,14 @@ public class FinancialManagement extends PersiObject
 
 		externalTransactionRequests = new LinkedList<ExternalTransactionRequest>();
 		realAccounDataUpdateRequests = new LinkedList<RealAccountDataUpdateRequest>();
+		
 	}
 
 	public void addExternalTransactionRequest(ExternalTransactionRequest request){ externalTransactionRequests.add(request);  DB_UPDATE(); }
 	public void addRealAccountDataUpdateRequest(RealAccountDataUpdateRequest request){ realAccounDataUpdateRequests.add(request);  DB_UPDATE(); }
 
-	public void addTransaction(TicketPurchase transaction){ ticketPurchases.add(transaction);  DB_UPDATE(); }
-	public void addTransaction(ExternalTransaction transaction){ externalTransactions.add(transaction);  DB_UPDATE(); }
+	public void addTransaction(TicketPurchase transaction){ ticketPurchases.add(transaction); }
+	public void addTransaction(ExternalTransaction transaction){ externalTransactions.add(transaction);  /*DB_UPDATE();*/ }
 	public void addTransaction(Winnings transaction){ winnings.add(transaction);  DB_UPDATE(); }
 
 	//delegate method:
@@ -98,7 +107,7 @@ public class FinancialManagement extends PersiObject
 	 * [intended for direct usage by controller]
 	 * @param tipTicketPrices
 	 */
-	public void setTipTicketPrices(TipTicketPrices tipTicketPrices){ this.tipTicketPrices = tipTicketPrices; DB_UPDATE(); }
+	public void setTipTicketPrices(TipTicketPrices tipTicketPrices){ this.tipTicketPrices = tipTicketPrices; /*DB_UPDATE();*/ }
 
 	/**
 	 * [intended for direct usage by controller]

@@ -15,7 +15,10 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.ManyToMany;
@@ -30,6 +33,7 @@ import org.joda.time.DateTime;
 @Table(name="GroupTable")
 public class Group extends PersiObject
 {
+	@Column(unique=true)
 	protected String name;
 	protected String infoText;
 	@Temporal(value = TemporalType.TIMESTAMP)
@@ -37,6 +41,7 @@ public class Group extends PersiObject
 	protected Boolean closed;
 	
 	@ManyToOne
+	@JoinColumn(name="GROUPMANAGEMENTID_PERSISTENCEID")
 	protected GroupManagement groupManagementId;
 
 	@OneToOne
@@ -51,11 +56,13 @@ public class Group extends PersiObject
 	@OneToMany(mappedBy="group")
 	protected List<TotoGroupTip> totoGroupTips;
 
-	@OneToMany(mappedBy="group")
+	@OneToMany(mappedBy="group",fetch=FetchType.EAGER)
+	@JoinColumn(name="GROUP_PERSISTENCEID",referencedColumnName="PERSISTENCEID")
 	protected List<GroupMembershipApplication> groupInvitations;
 	@OneToMany(mappedBy="group")
 	protected List<GroupAdminRightsTransfereOffering> groupAdminRightsTransfereOfferings;
-	@OneToMany(mappedBy="group")
+	@OneToMany(mappedBy="group",fetch=FetchType.EAGER)
+	@JoinColumn(name="GROUP_PERSISTENCEID")
 	protected List<GroupMembershipApplication> groupMembershipApplications;
 
 	@Deprecated
@@ -65,14 +72,16 @@ public class Group extends PersiObject
 	{
 		this.closed = false;
 		
+		this.groupManagementId = Lottery.getInstance().getGroupManagement();
+		
 		this.name = name;
 		this.infoText = infoText;
 		foundingDate = Lottery.getInstance().getTimer().getDateTime().toDate();
 		
 		this.groupAdmin = groupAdmin;
-//		this.groupAdmin.addGroup(this);
 		
 		groupMembers =  new LinkedList<Customer>();
+		groupMembers.add(groupAdmin);
 		
 		dailyLottoGroupTips = new LinkedList<DailyLottoGroupTip>();
 		weeklyLottoGroupTips = new LinkedList<WeeklyLottoGroupTip>();
@@ -212,19 +221,19 @@ public class Group extends PersiObject
 	{
 		for(GroupMembershipApplication application : groupMembershipApplications)
 		{
-			if(application.getMember() == groupMember && application.getState() == RequestState.UNHANDLED)
+			if(application.getMember() == groupMember && application.getState() == RequestState.Unhandled)
 				application.withdraw();
 		}
 
 		for(GroupMembershipApplication invitation : groupInvitations)
 		{
-			if(invitation.getMember() == groupMember && invitation.getState() == RequestState.UNHANDLED)
+			if(invitation.getMember() == groupMember && invitation.getState() == RequestState.Unhandled)
 				invitation.withdraw();
 		}
 
 		for(GroupAdminRightsTransfereOffering offerings : groupAdminRightsTransfereOfferings)
 		{
-			if(offerings.getMember() == groupMember && offerings.getState() == RequestState.UNHANDLED)
+			if(offerings.getMember() == groupMember && offerings.getState() == RequestState.Unhandled)
 				offerings.withdraw();
 		}
 	}
@@ -261,15 +270,15 @@ public class Group extends PersiObject
 		
 		//withdraw all group related requests not only those which are associated with groupMembers:
 		for(GroupMembershipApplication application : groupMembershipApplications)
-			if(application.getState() == RequestState.UNHANDLED)
+			if(application.getState() == RequestState.Unhandled)
 				application.withdraw();
 
 		for(GroupMembershipApplication invitation : groupInvitations)
-			if(invitation.getState() == RequestState.UNHANDLED)
+			if(invitation.getState() == RequestState.Unhandled)
 				invitation.withdraw();
 		
 		for(GroupAdminRightsTransfereOffering offerings : groupAdminRightsTransfereOfferings)
-			if(offerings.getState() == RequestState.UNHANDLED)
+			if(offerings.getState() == RequestState.Unhandled)
 				offerings.withdraw();
 		
 		DB_UPDATE(); 
@@ -321,4 +330,12 @@ public class Group extends PersiObject
 	public List<DailyLottoGroupTip> getDailyLottoGroupTips(){ return dailyLottoGroupTips; }	
 	public List<WeeklyLottoGroupTip> getWeeklyLottoGroupTips(){ return weeklyLottoGroupTips; }	
 	public List<TotoGroupTip> getTotoGroupTips(){ return totoGroupTips; }	
+	
+//---------------Änderung von Andre----------------------------------------------
+	public String testForAppl(Customer cus){
+		for(GroupMembershipApplication gma : this.groupMembershipApplications){
+			if (gma.getMember().equals(cus)) return gma.getState().name(); 
+		}
+		return "null";
+	}
 }

@@ -15,6 +15,7 @@ import org.joda.time.DateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.OneToMany;
@@ -36,15 +37,15 @@ public class Member extends PersistentUser
 	protected Date registrationDate;
 	
 	@ManyToOne
-	protected MemberManagement memberManagementID;
+	protected MemberManagement memberManagement;
 	
-	@OneToOne(cascade=CascadeType.ALL) 
+	@OneToOne(fetch=FetchType.EAGER) 
     @JoinColumn(name="memberDataId") 
 	protected MemberData memberData;
-	@OneToMany(mappedBy="member")
+	@OneToMany(mappedBy="member",fetch=FetchType.EAGER)
 	protected List<MemberDataUpdateRequest> memberDataUpdateRequest;
-	@OneToMany(mappedBy="member")
-	@JoinColumn(name="member", referencedColumnName="member_ID")
+	@OneToMany
+	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
 	protected List<Notification> notifications;
 	
 	protected int type;//0-Employee, 1-Admin, 2-Notary, 3-Customer
@@ -89,6 +90,8 @@ public class Member extends PersistentUser
 		
 		memberDataUpdateRequest = new LinkedList<MemberDataUpdateRequest>();
 		notifications = new LinkedList<Notification>();
+		
+		this.memberManagement = Lottery.getInstance().getMemberManagement();
 	}	
 	
 	public MemberType getType()
@@ -138,19 +141,21 @@ public class Member extends PersistentUser
 	
 	/**
 	 * [intended for direct usage by controller]
-	 * Create a new "MemberDataUpdateRequest" and adds a reference of the request to the "MemberManagement"
-	 * and the "Member" himself.
+	 * Creates a new "MemberDataUpdateRequest" and adds a reference of the request to the "MemberManagement"
+	 * and the "Member" himself. Returns the created request.
 	 * @param note
 	 * @param updatedData
 	 */
-	public void sendDataUpdateRequest(MemberData updatedData, String note)	
+	public MemberDataUpdateRequest sendDataUpdateRequest(MemberData updatedData, String note)	
 	{
-		MemberDataUpdateRequest request =  GmbFactory.new_MemberDataUpdateRequest(updatedData, this, note);
-
+		//MemberDataUpdateRequest request =  GmbFactory.new_MemberDataUpdateRequest(updatedData, this, note);
+		MemberDataUpdateRequest request = new MemberDataUpdateRequest(updatedData, this, note);
 		Lottery.getInstance().getMemberManagement().addMemberDataUpdateRequest(request);
 
 		memberDataUpdateRequest.add(request);
 		
 		DB_UPDATE(); 
+		
+		return request;
 	}	
 }

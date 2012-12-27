@@ -35,7 +35,6 @@ import gmb.model.tip.draw.DailyLottoDraw;
 import gmb.model.tip.draw.Draw;
 import gmb.model.tip.draw.TotoEvaluation;
 import gmb.model.tip.draw.WeeklyLottoDraw;
-import gmb.model.tip.draw.container.WeeklyLottoDrawEvaluationResult;
 import gmb.model.tip.draw.container.FootballGameData;
 import gmb.model.tip.tip.Tip;
 import gmb.model.tip.tip.group.DailyLottoGroupTip;
@@ -336,11 +335,11 @@ public class GmbFactory
 	}
 	
 	////member:
-	public static MemberManagement new_MemberManagement()
-	{
-		MemberManagement obj = new MemberManagement(null);
-		return (MemberManagement) obj.DB_ADD();
-	}
+//	public static MemberManagement new_MemberManagement()
+//	{
+//		MemberManagement obj = new MemberManagement(null);
+//		return (MemberManagement) obj.DB_ADD();
+//	}
 	
 	////request:
 	//data:
@@ -384,11 +383,11 @@ public class GmbFactory
 	//////tip:
 	////draw:
 	//container:	
-	public static WeeklyLottoDrawEvaluationResult new_DrawEvaluationResult()
-	{
-		WeeklyLottoDrawEvaluationResult obj = new WeeklyLottoDrawEvaluationResult(null);
-		return (WeeklyLottoDrawEvaluationResult) obj.DB_ADD();
-	}
+//	public static WeeklyLottoDrawEvaluationResult new_DrawEvaluationResult()
+//	{
+//		WeeklyLottoDrawEvaluationResult obj = new WeeklyLottoDrawEvaluationResult(null);
+//		return (WeeklyLottoDrawEvaluationResult) obj.DB_ADD();
+//	}
 	
 	////tip:
 	//single:
@@ -429,11 +428,11 @@ public class GmbFactory
 	}
 	
 	//....
-	public static TipManagement new_TipManagement()
-	{
-		TipManagement obj = new TipManagement(null);
-		return (TipManagement) obj.DB_ADD();
-	}
+//	public static TipManagement new_TipManagement()
+//	{
+//		TipManagement obj = new TipManagement(null);
+//		return (TipManagement) obj.DB_ADD();
+//	}
 	
 	//========================================================================================================================//
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

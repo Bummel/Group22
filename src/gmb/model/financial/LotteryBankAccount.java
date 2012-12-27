@@ -3,6 +3,7 @@ package gmb.model.financial;
 import gmb.model.GmbFactory;
 import gmb.model.Lottery;
 import gmb.model.PersiObject;
+import gmb.model.ReturnBox;
 import gmb.model.financial.container.RealAccountData;
 import gmb.model.financial.transaction.ExternalTransaction;
 import gmb.model.financial.transaction.TicketPurchase;
@@ -16,6 +17,9 @@ import gmb.model.CDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -30,19 +34,20 @@ public class LotteryBankAccount extends PersiObject
 {	
 	@OneToOne(fetch=FetchType.LAZY)
 	protected Customer owner;
+	@Embedded
 	protected CDecimal credit;	
-	@OneToOne (cascade=CascadeType.ALL)
-    @JoinColumn(name="realAccountDataId") 
+	@OneToOne//(cascade=CascadeType.ALL)
+    @JoinColumn(name="REALACCOUNTDATAID") 
 	protected RealAccountData realAccountData;
-	@OneToMany(mappedBy="lotteryBankAccount")
+	@OneToMany
 	protected List<TicketPurchase> ticketPurchases;
-	@ElementCollection
+	@OneToMany
 	protected List<Winnings> winnings;
-	@ElementCollection
+	@OneToMany
 	protected List<ExternalTransaction> externalTransactions;
 	@OneToMany
 	protected List<ExternalTransactionRequest> externalTransactionRequests;	
-	@ElementCollection
+	@OneToMany
 	protected List<RealAccountDataUpdateRequest> realAccountDataUpdateRequests;
 	
 	@Deprecated
@@ -75,10 +80,11 @@ public class LotteryBankAccount extends PersiObject
 	 * [intended for direct usage by controller]
 	 * Creates a "DataUpdateRequest" based on "updatedData" 
 	 * and adds references to the lists of this "LotteryBankAccount" and the "FinancialManagement".
+	 * Returns the created request.
 	 * @param note
 	 * @param updatedData
 	 */
-	public void sendDataUpdateRequest(RealAccountData updatedData, String note)
+	public RealAccountDataUpdateRequest sendDataUpdateRequest(RealAccountData updatedData, String note)
 	{
 		RealAccountDataUpdateRequest request = GmbFactory.new_RealAccountDataUpdateRequest(updatedData, owner, note);
 		
@@ -87,19 +93,21 @@ public class LotteryBankAccount extends PersiObject
 		realAccountDataUpdateRequests.add(request);
 		
 		DB_UPDATE();
+		
+		return request;
 	}
 	
 	/**
 	 * [intended for direct usage by controller]
 	 * Creates an "ExternalTransactionRequest" based on "transaction" 
 	 * and adds references to the lists of this "LotteryBankAccount" and the "FinancialManagement".
-	 * Returns false if the "transaction" is invalid which is the case when the customer tries
+	 * Returns 1 (var1) if the "transaction" is invalid which is the case when the customer tries
 	 * to transact more money to his real account than he is capable to based on his "LotteryBankAccount"'s "credit",
-	 * otherwise true.
+	 * otherwise 0 (var1). Also returns the created request (var2).
 	 * @param note
 	 * @param updatedData
 	 */
-	public boolean sendExternalTransactionRequest(CDecimal amount, String note)
+	public ReturnBox<Integer, ExternalTransactionRequest> sendExternalTransactionRequest(CDecimal amount, String note)
 	{
 		if(amount.signum() != -1 || owner.hasEnoughMoneyToPurchase(amount))
 		{
@@ -108,12 +116,12 @@ public class LotteryBankAccount extends PersiObject
 			externalTransactionRequests.add(request);
 			Lottery.getInstance().getFinancialManagement().addExternalTransactionRequest(request);
 			
-			DB_UPDATE(); 
+//			DB_UPDATE(); 
 			
-			return true;
+			return new ReturnBox<Integer, ExternalTransactionRequest>(new Integer(0), request);
 		}
 		else
-			return false;
+			return new ReturnBox<Integer, ExternalTransactionRequest>(new Integer(1), null);
 	}
 	
 	public void setOwner(Customer owner){ this.owner = owner; DB_UPDATE(); }

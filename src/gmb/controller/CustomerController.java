@@ -1,5 +1,20 @@
 package gmb.controller;
-import gmb.model.member.*;
+import java.util.LinkedList;
+import java.util.List;
+
+import gmb.model.GmbFactory;
+import gmb.model.GmbPersistenceManager;
+import gmb.model.Lottery;
+import gmb.model.group.Group;
+import gmb.model.member.Customer;
+import gmb.model.member.Member;
+import gmb.model.member.MemberManagement;
+import gmb.model.request.RequestState;
+import gmb.model.request.group.GroupMembershipApplication;
+import gmb.model.tip.tip.single.WeeklyLottoTip;
+import gmb.model.tip.tipticket.single.DailyLottoSTT;
+import gmb.model.tip.tipticket.single.TotoSTT;
+import gmb.model.tip.tipticket.single.WeeklyLottoSTT;
 
 import org.salespointframework.core.user.PersistentUserManager;
 import org.salespointframework.core.user.UserIdentifier;
@@ -13,29 +28,60 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller	
 	public class CustomerController {
-	
 
-	private final PersistentUserManager pManager = new PersistentUserManager();
-		
-	
-	@RequestMapping(value="/customerNavigation",method=RequestMethod.GET)
-	public ModelAndView employeeNavigation(
-			@RequestParam("uid") UserIdentifier uid,
-			@RequestParam("top_navi_name") String topNaviName,
-			@RequestParam("sub_navi") String subNavi,
-			@RequestParam("sub_navi_name") String subNaviName,
-			@RequestParam("content") String content,
-			@RequestParam("content_active") Boolean contentActive){
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("user/employee");
-		Member user = pManager.get(Member.class, uid);
-		modelAndView.addObject("currentUser",user);
-		modelAndView.addObject("sub_navi_active",true);
-		modelAndView.addObject("top_navi_name",topNaviName);
-		modelAndView.addObject("sub_navi",subNavi);
-		modelAndView.addObject("sub_navi_name",subNaviName);
-		modelAndView.addObject("content",content);
-		modelAndView.addObject("content_active",contentActive);
-		return modelAndView;
+
+//-------------------------------------Tipps---------------------------------------------------	
+
+	@RequestMapping(value="/customerTipManagement",method=RequestMethod.GET)
+	public ModelAndView customerTipManagement(
+			@RequestParam("uid") UserIdentifier uid){
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("currentUser", GmbPersistenceManager.get(uid));
+		mav.setViewName("customer/tips/tip_navigation");
+		return mav;
 	}
+	
+	@RequestMapping(value="/customerTips",method=RequestMethod.GET)
+	public ModelAndView customerTips(
+			@RequestParam("uid") UserIdentifier uid){
+		ModelAndView mav = new ModelAndView();
+		Customer currentCustomer = (Customer)GmbPersistenceManager.get(uid);
+		mav.setViewName("customer/tips/tip_customerTips");
+		
+		LinkedList<WeeklyLottoSTT> weeklySTTList = new LinkedList<WeeklyLottoSTT>();
+		LinkedList<TotoSTT> totoSTTList = new LinkedList<TotoSTT>();
+		LinkedList<DailyLottoSTT> dailyLottoSTTList = new LinkedList<DailyLottoSTT>();
+		
+		for(WeeklyLottoSTT wLSTT : currentCustomer.getWeeklyLottoSTTs()){
+			if(!wLSTT.getTip().getDraw().getEvaluated())
+				weeklySTTList.add(wLSTT);
+		}
+		for(TotoSTT tSTT : currentCustomer.getTotoSTTs()){
+			if(!tSTT.getTip().getDraw().getEvaluated())
+				totoSTTList.add(tSTT);
+		}
+		for(DailyLottoSTT dLSTT : currentCustomer.getDailyLottoSTTs()){
+			if(!dLSTT.getTip().getDraw().getEvaluated())
+				dailyLottoSTTList.add(dLSTT);
+		}
+		//System.out.println(weeklySTTList.get(0).getTip().getTip().length);
+		mav.addObject("weeklySTTList", (weeklySTTList.size() > 0) ? weeklySTTList : null);
+		mav.addObject("totoSTTList", (totoSTTList.size() > 0) ? totoSTTList : null );
+		mav.addObject("dailySTTList", (dailyLottoSTTList.size() > 0) ? dailyLottoSTTList : null);
+		mav.addObject("currentUser", currentCustomer);
+		return mav;	
+	}	
+	
+//-------------------------------------Groups---------------------------------------------------	
+	
+	@RequestMapping(value="/customerGroups",method=RequestMethod.GET)
+	public ModelAndView customerGroups(ModelAndView mav,
+			@RequestParam("uid") UserIdentifier uid){
+		mav.setViewName("customer/groups/groups_start");
+		//---> GroupController
+		mav.addObject("currentUser", GmbPersistenceManager.get(uid));
+		return mav;	
+	}
+	
+	
 }

@@ -4,24 +4,42 @@ import gmb.model.CDecimal;
 import gmb.model.PersiObject;
 import gmb.model.financial.FinancialManagement;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
 @Entity
 public class TipTicketPrices extends PersiObject
 {	
-	@OneToOne
-	protected FinancialManagement financialManagementId;
-	
+	@Embedded
+	@AttributeOverride(name="myAmount", column= @Column(name="weeklyLottoSTTPrice",precision = 10, scale = 2))
 	protected CDecimal weeklyLottoSTTPrice;
+	@Embedded
+	@AttributeOverride(name="myAmount", column= @Column(name="totoSTTPRice",precision = 10, scale = 2))
 	protected CDecimal totoSTTPrice;
+	@Embedded
+	@AttributeOverride(name="myAmount", column= @Column(name="dailyLottoSTTPrice",precision = 10, scale = 2))
 	protected CDecimal dailyLottoSTTPrice;
 	
+	@Embedded
+	@AttributeOverride(name="myAmount", column= @Column(name="weeklyLottoPTTPrice_Month",precision = 10, scale = 2))
 	protected CDecimal weeklyLottoPTTPrice_Month;
+	@Embedded
+	@AttributeOverride(name="myAmount", column= @Column(name="dailyLottoPTTPrice_Month",precision = 10, scale = 2))
 	protected CDecimal dailyLottoPTTPrice_Month;
+	@Embedded
+	@AttributeOverride(name="myAmount", column= @Column(name="weeklyLottoPTTPrice_HalfYear",precision = 10, scale = 2))
 	protected CDecimal weeklyLottoPTTPrice_HalfYear;
+	@Embedded
+	@AttributeOverride(name="myAmount", column= @Column(name="dailyLottoPTTPrice_HalfYear",precision = 10, scale = 2))
 	protected CDecimal dailyLottoPTTPrice_HalfYear;
+	@Embedded
+	@AttributeOverride(name="myAmount", column= @Column(name="weeklyLottoPTTPrice_Year",precision = 10, scale = 2))
 	protected CDecimal weeklyLottoPTTPrice_Year;
+	@Embedded
+	@AttributeOverride(name="myAmount", column= @Column(name="dailyLottoPTTPrice_Year",precision = 10, scale = 2))
 	protected CDecimal dailyLottoPTTPrice_Year;
 	
 	@Deprecated

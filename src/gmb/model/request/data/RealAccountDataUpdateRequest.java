@@ -1,14 +1,16 @@
 package gmb.model.request.data;
 
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 import gmb.model.financial.container.RealAccountData;
 import gmb.model.member.Customer;
 import gmb.model.request.Request;
 
-@Embeddable
+@Entity
 public class RealAccountDataUpdateRequest extends Request 
 {	
+	@OneToOne
 	protected RealAccountData updatedData;
 
 	@Deprecated

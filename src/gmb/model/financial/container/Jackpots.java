@@ -8,17 +8,27 @@ import gmb.model.CDecimal;
 import gmb.model.PersiObject;
 import gmb.model.financial.FinancialManagement;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
 public class Jackpots extends PersiObject
 {
-	@OneToOne
-	protected FinancialManagement financialManagementId;
-	
+	@ElementCollection
+	@AttributeOverride(name="myAmount", column= @Column(name="weeklyLottoJackpot",precision = 10, scale = 2))
 	protected List<CDecimal> weeklyLottoJackpot;
+	@ElementCollection
+	@AttributeOverride(name="myAmount", column= @Column(name="dailyLottoJackpot",precision = 10, scale = 2))
 	protected List<CDecimal> dailyLottoJackpot;
+	@ElementCollection
+	@AttributeOverride(name="myAmount", column= @Column(name="totoJackpot",precision = 10, scale = 2))
 	protected List<CDecimal> totoJackpot;
 	
 	@Deprecated
@@ -39,7 +49,7 @@ public class Jackpots extends PersiObject
 	public void setDailyLottoJackpot(List<CDecimal> dailyLottoJackpot){ this.dailyLottoJackpot = dailyLottoJackpot; DB_UPDATE(); }
 	public void setTotoJackpot(List<CDecimal> totoJackpot){ this.totoJackpot = totoJackpot; DB_UPDATE(); }	
 	
-	public ArrayList<CDecimal> getWeeklyLottoJackpot(){ return (ArrayList<CDecimal>)weeklyLottoJackpot; }
+	public ArrayList<CDecimal> getWeeklyLottoJackpot(){ return new ArrayList<CDecimal>(weeklyLottoJackpot); }
 	public ArrayList<CDecimal> getDailyLottoJackpot(){ return (ArrayList<CDecimal>)dailyLottoJackpot; }
 	public ArrayList<CDecimal> getTotoJackpot(){ return (ArrayList<CDecimal>)totoJackpot; }
 }

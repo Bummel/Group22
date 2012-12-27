@@ -6,6 +6,9 @@ import gmb.model.PersiObject;
 
 import java.util.Date;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
@@ -28,11 +31,17 @@ public abstract class TipTicket extends PersiObject implements  WeeklyLottoTT, D
 {	
 	@Temporal(value = TemporalType.DATE)
 	protected Date purchaseDate;
+	@Embedded
+	@AttributeOverride(name="myAmount", column= @Column(name="paidPurchasePrice"))
 	protected CDecimal paidPurchasePrice;
+	@Embedded
+	@AttributeOverride(name="myAmount", column= @Column(name="perTicketPaidPurchasePrice"))
 	protected CDecimal perTicketPaidPurchasePrice;//the price of the corresponding SingleTT (the same like paidPurchasePrice for SingleTTs of course)
+	@Embedded
+	@AttributeOverride(name="myAmount", column= @Column(name="remainingValue"))
 	protected CDecimal remainingValue;//decrement this by perTicketPaidPurchasePrice for each submitted tip (in the case of PermaTTs the treasury has to pay as soon this one goes under 0)
 	
-	@OneToOne(mappedBy="ticket")
+	@OneToOne
 	protected TicketPurchase ticketPurchaseId;
 	
 	@ManyToOne
