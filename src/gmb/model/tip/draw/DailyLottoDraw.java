@@ -2,6 +2,7 @@ package gmb.model.tip.draw;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import gmb.model.ArrayListFac;
 import gmb.model.CDecimal;
@@ -23,7 +24,10 @@ import gmb.model.tip.tipticket.perma.DailyLottoPTT;
 import gmb.model.tip.tipticket.type.DailyLottoTT;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.joda.time.DateTime;
 
@@ -33,25 +37,26 @@ import org.joda.time.DateTime;
 @Entity
 public class DailyLottoDraw extends Draw 
 {
-	@ManyToOne
-	protected TipManagement tipManagementId;
-
+	
+	
 	@Deprecated
 	protected DailyLottoDraw(){}
 
 	public DailyLottoDraw(DateTime planedEvaluationDate)
 	{
 		super(planedEvaluationDate);
-		this.tipManagementId = Lottery.getInstance().getTipManagement();
 		
-		//automatically create SingleTips from PermaTTs:
-		for(Member customer : Lottery.getInstance().getMemberManagement().getMembers())
-			if(customer.getType() == MemberType.Customer)
-				for(DailyLottoPTT ticket : ((Customer)customer).getDailyLottoPTTs())
-					if(!ticket.isExpired() && ticket.getTip() != null)
-						this.createAndSubmitSingleTip(ticket, ticket.getTip());
 	}
-
+/**
+ * Automatically create SingleTips from PermaTTs
+ */
+	public void createSingleTipsfromPermaTTs(){
+	for(Member customer : Lottery.getInstance().getMemberManagement().getMembers())
+		if(customer.getType() == MemberType.Customer)
+			for(DailyLottoPTT ticket : ((Customer)customer).getDailyLottoPTTs())
+				if(!ticket.isExpired() && ticket.getTip() != null)
+					this.createAndSubmitSingleTip(ticket, ticket.getTip());
+	}
 	/**
 	 * [Intended for direct usage by controller]<br>
 	 * Evaluates the "Draw" with all implications (creating and sending "Winnings", updating the "Jackpot", updating the "LotteryCredits",...).
@@ -68,7 +73,7 @@ public class DailyLottoDraw extends Draw
 			result = new int[10];
 			
 			for(int i = 0; i < 10; ++i)
-				result[i] = (int)(Math.random() * 100000) % 10;
+				result[i] = (int)((Math.random() * 100000) % 10);
 		}
 		
 		assert this.result != null || result.length == 10 : "Wrong result length (!=10) given to DailyLottoDraw.evaluate(int[] result)!";

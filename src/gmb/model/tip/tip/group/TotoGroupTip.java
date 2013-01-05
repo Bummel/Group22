@@ -1,5 +1,6 @@
 package gmb.model.tip.tip.group;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import javax.persistence.Entity;

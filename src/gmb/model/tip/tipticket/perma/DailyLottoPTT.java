@@ -1,5 +1,7 @@
 package gmb.model.tip.tipticket.perma;
 
+import java.util.ArrayList;
+
 import gmb.model.CDecimal;
 
 import gmb.model.Lottery;
@@ -53,4 +55,5 @@ public class DailyLottoPTT extends PermaTT implements DailyLottoTT
 		
 		return (new DailyLottoTip((DailyLottoTT)null, new DailyLottoDraw(Lottery.getInstance().getTimer().getDateTime().plusDays(5)))).validateTip(tip);//use temporary objects for validation
 	}
+
 }

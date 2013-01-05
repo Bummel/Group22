@@ -3,10 +3,12 @@ package gmb.model.tip.draw;
 import gmb.model.ArrayListFac;
 import gmb.model.CDecimal;
 import gmb.model.GmbFactory;
+import gmb.model.GmbPersistenceManager;
 import gmb.model.ReturnBox;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import gmb.model.Lottery;
 import gmb.model.financial.transaction.Winnings;
@@ -35,9 +37,8 @@ import javax.persistence.*;
 @Entity
 public class WeeklyLottoDraw extends Draw
 {
-	@ManyToOne
-	protected TipManagement tipManagementId;
 
+	
 	protected static final int categoryCount = 8;
 	
 	@Deprecated
@@ -46,14 +47,16 @@ public class WeeklyLottoDraw extends Draw
 	public WeeklyLottoDraw(DateTime planedEvaluationDate)
 	{
 		super(planedEvaluationDate);
-		this.tipManagementId = Lottery.getInstance().getTipManagement();
-		
-		//automatically create SingleTips from PermaTTs:
-		for(Member customer : Lottery.getInstance().getMemberManagement().getMembers())
-			if(customer.getType() == MemberType.Customer)
-				for(WeeklyLottoPTT ticket : ((Customer)customer).getWeeklyLottoPTTs())
-					if(!ticket.isExpired() && ticket.getTip() != null)
-						this.createAndSubmitSingleTip(ticket, ticket.getTip());
+	}
+	/**
+	 * Automatically create SingleTips from PermaTipTickets.
+	 */
+	public void createSingleTipsfromPermaTTs(){
+	for(Member customer : Lottery.getInstance().getMemberManagement().getMembers())
+		if(customer.getType() == MemberType.Customer)
+			for(WeeklyLottoPTT ticket : ((Customer)customer).getWeeklyLottoPTTs())
+				if(!ticket.isExpired() && ticket.getTip() != null)
+					this.createAndSubmitSingleTip(ticket, ticket.getTip());
 	}
 
 	/**
@@ -340,4 +343,5 @@ public class WeeklyLottoDraw extends Draw
 	{
 		return GmbFactory.new_WeeklyLottoTip((WeeklyLottoTT)ticket, this);
 	}
+	
 }

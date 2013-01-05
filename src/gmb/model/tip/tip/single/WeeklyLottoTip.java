@@ -1,10 +1,24 @@
 package gmb.model.tip.tip.single;
 
+import java.util.ArrayList;
+
+import gmb.model.member.Customer;
+import gmb.model.tip.draw.Draw;
 import gmb.model.tip.draw.WeeklyLottoDraw;
 import gmb.model.tip.tip.group.WeeklyLottoGroupTip;
+import gmb.model.tip.tipticket.TipTicket;
+import gmb.model.tip.tipticket.single.WeeklyLottoSTT;
 import gmb.model.tip.tipticket.type.WeeklyLottoTT;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+import org.eclipse.persistence.annotations.JoinFetch;
+import org.eclipse.persistence.annotations.JoinFetchType;
+
 
 /** 
  * A SingleTip for the weekly 6/49 lottery.
@@ -14,7 +28,8 @@ public class WeeklyLottoTip extends SingleTip
 {
 	protected int superNumber;
 
-
+	
+	
 	@Deprecated
 	protected WeeklyLottoTip(){}
 
@@ -65,4 +80,7 @@ public class WeeklyLottoTip extends SingleTip
 	 */
 	public void setSuperNumber(int superNumber){ this.superNumber = superNumber; DB_UPDATE(); }	
 	public int getSuperNumber(){ return superNumber; }
+	
+	public TipTicket getTipTicket(){ return tipTicket; }
+	public Customer getOwner(){return tipTicket.getOwner(); }
 }

@@ -12,9 +12,8 @@ import javax.persistence.MappedSuperclass;
  * Abstract super class for all persistent classes in the system.
  * (Except for the member class, which handles this functionality on her own)
  */
-@Entity
-@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
-public abstract class PersiObject 
+@MappedSuperclass
+public abstract class PersiObjectSingleTable 
 {
 	@Id
 	@GeneratedValue (strategy=GenerationType.AUTO)
@@ -22,9 +21,7 @@ public abstract class PersiObject
 
 	public int getId(){ return persistenceID;}
 
-	protected PersiObject(){}
-
-	public PersiObject DB_ADD(){ return GmbPersistenceManager.add(this); }
+	public PersiObjectSingleTable DB_ADD(){ return GmbPersistenceManager.add(this); }
 	public void DB_UPDATE(){ GmbPersistenceManager.update(this); }
 	public void DB_REMOVE(){ GmbPersistenceManager.remove(this); }
 }

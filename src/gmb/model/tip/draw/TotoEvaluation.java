@@ -41,8 +41,6 @@ public class TotoEvaluation extends Draw
 	
 	protected static final int categoryCount = 5;
 	
-	@ManyToOne
-	protected TipManagement tipManagementId;
 	
 	@Deprecated
 	protected TotoEvaluation(){}
@@ -53,7 +51,6 @@ public class TotoEvaluation extends Draw
 		
 		assert gameData.size() == 9 : "Wrong gameData size (!=9) given to TotoEvaluation.setGameData(ArrayList<FootballGameData> gameData)!";
 		this.gameData = gameData;
-		this.tipManagementId = Lottery.getInstance().getTipManagement();
 	}
 	
 	/**

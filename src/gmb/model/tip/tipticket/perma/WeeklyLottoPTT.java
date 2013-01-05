@@ -1,5 +1,7 @@
 package gmb.model.tip.tipticket.perma;
 
+import java.util.ArrayList;
+
 import gmb.model.CDecimal;
 
 import gmb.model.Lottery;

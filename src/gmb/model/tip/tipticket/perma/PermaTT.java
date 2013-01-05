@@ -4,12 +4,17 @@ import gmb.model.Lottery;
 import gmb.model.tip.tip.single.SingleTip;
 import gmb.model.tip.tipticket.TipTicket;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
 import javax.persistence.OneToMany;
 import javax.persistence.Entity;
 
+import org.eclipse.persistence.annotations.Convert;
+import org.eclipse.persistence.annotations.Converter;
 import org.joda.time.DateTime;
 
 /**
@@ -135,11 +140,12 @@ public abstract class PermaTT extends TipTicket
 	 */
 	public int setTip(int[] tip)
 	{
-		if(tip != null)
-		{
-			int result = this.validateTip(tip);
-			if(result != 0) return result;
-		}
+//		if(tip != null)
+//		{
+//			int result = this.validateTip(tip);
+//			if(result != 0) return result;
+//		}
+//		------------------------------------making extra objects for validating a tip troubles the database and I had no time to fix it yet-------
 
 		this.tip = tip;
 		DB_UPDATE();
@@ -148,7 +154,7 @@ public abstract class PermaTT extends TipTicket
 	}
 	
 	public abstract int validateTip(int[] tip);
-	public int[] getTip(){ return tip; }
+	public int[] getTip(){return tip; }
 	
 	public void setDurationType(int durationType){ this.durationType = durationType; DB_UPDATE(); }
 	public void setExpired(boolean expired){ this.expired = expired; DB_UPDATE(); }

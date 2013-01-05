@@ -1,7 +1,9 @@
 package gmb.model.tip.tip.single;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import gmb.model.Lottery;
-import gmb.model.member.Customer;
 import gmb.model.tip.draw.Draw;
 import gmb.model.tip.tip.Tip;
 import gmb.model.tip.tip.group.GroupTip;
@@ -9,9 +11,13 @@ import gmb.model.tip.tipticket.TipTicket;
 import gmb.model.tip.tipticket.perma.PermaTT;
 import gmb.model.tip.tipticket.type.GenericTT;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+
 
 /**
  * Abstract super class for all tip classes which
@@ -23,11 +29,13 @@ public abstract class SingleTip extends Tip
 	protected int[] tip;
 	@ManyToOne
 	protected PermaTT permaTT;
-	@OneToOne
+
+	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="TIPTICKET_PERSISTENCEID")
 	protected TipTicket tipTicket;
 	@ManyToOne
 	protected GroupTip groupTip;
-
+	
 	
 	@Deprecated
 	protected SingleTip(){}
@@ -105,7 +113,7 @@ public abstract class SingleTip extends Tip
 				return -1;
 			
 			draw.removeTip(this);
-			tipTicket.removeTip(this);
+//			tipTicket.removeTip(this);
 			
 			return 0;
 		}
@@ -140,14 +148,14 @@ public abstract class SingleTip extends Tip
 	/**
 	 * [Intended for direct usage by controller][check-method]<br>
 	 * Checks whether "tip" would be a valid result to be tipped.
-	 * @param tip
+	 * @param tip2
 	 * @return
 	 * <ul>
 	 * <li> 0 - successful
 	 * <li>-2 - not enough time left until the planned evaluation of the draw
 	 * <ul>
 	 */
-	public int validateTip(int[] tip)
+	public int validateTip(int[] tip2)
 	{
 		if(draw.isTimeLeftUntilEvaluationForChanges())
 			return 0;
@@ -160,5 +168,5 @@ public abstract class SingleTip extends Tip
 	public TipTicket getTipTicket(){ return tipTicket; }
 	public GroupTip getGroupTip(){ return groupTip; }
 	
-	public Customer getOwner(){ return tipTicket.getOwner(); }
+//	public Customer getOwner(){ return tipTicket.getOwner(); }
 }

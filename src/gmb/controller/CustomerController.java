@@ -1,7 +1,9 @@
 package gmb.controller;
+import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 import java.util.List;
 
+import gmb.model.GmbDecoder;
 import gmb.model.GmbFactory;
 import gmb.model.GmbPersistenceManager;
 import gmb.model.Lottery;
@@ -11,8 +13,14 @@ import gmb.model.member.Member;
 import gmb.model.member.MemberManagement;
 import gmb.model.request.RequestState;
 import gmb.model.request.group.GroupMembershipApplication;
+import gmb.model.tip.tip.single.DailyLottoTip;
+import gmb.model.tip.tip.single.SingleTip;
 import gmb.model.tip.tip.single.WeeklyLottoTip;
+import gmb.model.tip.tipticket.TipTicket;
+import gmb.model.tip.tipticket.perma.DailyLottoPTT;
+import gmb.model.tip.tipticket.perma.WeeklyLottoPTT;
 import gmb.model.tip.tipticket.single.DailyLottoSTT;
+import gmb.model.tip.tipticket.single.SingleTT;
 import gmb.model.tip.tipticket.single.TotoSTT;
 import gmb.model.tip.tipticket.single.WeeklyLottoSTT;
 
@@ -51,11 +59,6 @@ import org.springframework.web.servlet.ModelAndView;
 		LinkedList<WeeklyLottoSTT> weeklySTTList = new LinkedList<WeeklyLottoSTT>();
 		LinkedList<TotoSTT> totoSTTList = new LinkedList<TotoSTT>();
 		LinkedList<DailyLottoSTT> dailyLottoSTTList = new LinkedList<DailyLottoSTT>();
-		
-		for(WeeklyLottoSTT wLSTT : currentCustomer.getWeeklyLottoSTTs()){
-			if(!wLSTT.getTip().getDraw().getEvaluated())
-				weeklySTTList.add(wLSTT);
-		}
 		for(TotoSTT tSTT : currentCustomer.getTotoSTTs()){
 			if(!tSTT.getTip().getDraw().getEvaluated())
 				totoSTTList.add(tSTT);
@@ -64,24 +67,38 @@ import org.springframework.web.servlet.ModelAndView;
 			if(!dLSTT.getTip().getDraw().getEvaluated())
 				dailyLottoSTTList.add(dLSTT);
 		}
-		//System.out.println(weeklySTTList.get(0).getTip().getTip().length);
+		for(WeeklyLottoSTT wLSTT : currentCustomer.getWeeklyLottoSTTs()){
+			if(!wLSTT.getTip().getDraw().getEvaluated())
+				weeklySTTList.add(wLSTT);
+		}
 		mav.addObject("weeklySTTList", (weeklySTTList.size() > 0) ? weeklySTTList : null);
 		mav.addObject("totoSTTList", (totoSTTList.size() > 0) ? totoSTTList : null );
 		mav.addObject("dailySTTList", (dailyLottoSTTList.size() > 0) ? dailyLottoSTTList : null);
+		mav.addObject("weeklyPTTList", (currentCustomer.getWeeklyLottoPTTs().size() > 0 ) ? currentCustomer.getWeeklyLottoPTTs() : null);
+		mav.addObject("dailyPTTList", (currentCustomer.getDailyLottoPTTs().size() > 0) ? currentCustomer.getDailyLottoPTTs() : null);
 		mav.addObject("currentUser", currentCustomer);
-		return mav;	
-	}	
-	
-//-------------------------------------Groups---------------------------------------------------	
-	
-	@RequestMapping(value="/customerGroups",method=RequestMethod.GET)
-	public ModelAndView customerGroups(ModelAndView mav,
-			@RequestParam("uid") UserIdentifier uid){
-		mav.setViewName("customer/groups/groups_start");
-		//---> GroupController
-		mav.addObject("currentUser", GmbPersistenceManager.get(uid));
 		return mav;	
 	}
 	
+	@RequestMapping("/customerEditSTT")
+	public ModelAndView editSTT(ModelAndView mav,
+			@RequestParam("uid") UserIdentifier uid,
+			@RequestParam("STTid") int ticketId){
+		Customer currentCustomer = (Customer)GmbPersistenceManager.get(uid);
+		SingleTT stt = (SingleTT) GmbPersistenceManager.get(TipTicket.class, ticketId);
+		mav.addObject("singleTT", stt);
+		mav.addObject("currentUser", currentCustomer);
+		mav.setViewName("customer/tips/editSingleTickets");
+		return mav;
+	}
+	
+	@RequestMapping("/customerEditPTT")
+	public ModelAndView editPTT(ModelAndView mav,
+			@RequestParam("uid") UserIdentifier uid){
+		Customer currentCustomer = (Customer)GmbPersistenceManager.get(uid);
+		mav.addObject("currentUser", currentCustomer);
+		mav.setViewName("customer/tips/editPermaTickets");
+		return mav;
+	}
 	
 }
