@@ -28,7 +28,9 @@ public class Winnings extends InternalTransaction
 	 * a reference to the transaction will be added to the FinancialManagement and the affected user
 	 * the credit of the customer will be updated
 	 * the credit and prize amount of the lottery will be updated
-	 * @param transaction
+	 * @param tip
+	 * @param amount
+	 * @param prizeCategory
 	 */
 	public Winnings(Tip tip, CDecimal amount, int prizeCategory)
 	{

@@ -62,7 +62,8 @@ public class WeeklyLottoGroupTip extends GroupTip
 	 * [Intended for direct usage by controller]<br>
 	 * Submits tickets and tips if the amount matches the "minimumStake" criteria,
 	 * increment "currentOverallMinimumStake" by the amount of newly created tips. 
-	 * @param tips
+	 * @param tickets A list of tickets.
+	 * @param tipTips A list of tipped results.
 	 * @return {@link ReturnBox} with:<br>
 	 * var1 as {@link Integer}: <br>
 	 * <ul>

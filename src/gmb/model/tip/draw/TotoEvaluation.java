@@ -271,8 +271,7 @@ public class TotoEvaluation extends Draw
 	
 	/**
 	 * [Intended for direct usage by controller]<br>
-	 * Returns true if there is still time to (un-)submit tips, otherwise false.
-	 * @return
+	 * @return True if there is still time to (un-)submit tips, otherwise false.
 	 */
 	public boolean isTimeLeftUntilEvaluationForSubmission()
 	{

@@ -17,7 +17,18 @@ import gmb.model.member.Member;
 @Entity
 public abstract class Request extends Notification
 { 
+	/**
+	 * An integer encoding the state of the request:<br>
+	 * 0 - Unhandled<br>
+	 * 1 - Withdrawn<br>
+	 * 2 - Accepted<br>
+	 * 3 - Refused<br>
+	 */
 	protected int state;
+	
+	/**
+	 * The date of the last change made to the state attribute.
+	 */
 	@Temporal(value = TemporalType.TIMESTAMP)
 	protected Date lastStateChangeDate;
 
@@ -28,14 +39,18 @@ public abstract class Request extends Notification
 	{
 		super(note);
 		this.member = member;
-		
+
 		this.state = 0;//RequestState.UNHANDELED
-		
+
 		lastStateChangeDate = Lottery.getInstance().getTimer().getDateTime().toDate();
 	}
 
 	public Member getMember(){ return member; }
 
+	/**
+	 * 
+	 * @return The state of the request as {@link RequestState} object.
+	 */
 	public RequestState getState()
 	{
 		if(this.state == 1){ return RequestState.Withdrawn; }
@@ -48,8 +63,7 @@ public abstract class Request extends Notification
 	}
 
 	/**
-	 * returns the value of the integer which internally encodes the state
-	 * @return
+	 * @return The value of the integer which internally encodes the state.
 	 */
 	public int getStateAsInt(){ return state; }
 
@@ -65,7 +79,9 @@ public abstract class Request extends Notification
 	//				else
 	//					this.state = 0; 
 	//	}
-
+	/**
+	 * Sets the state to Unhandled.
+	 */
 	public void resetState()
 	{ 
 		state = 0; 
@@ -73,6 +89,9 @@ public abstract class Request extends Notification
 		DB_UPDATE();
 	}
 
+	/**
+	 * Sets the state to Withdrawn.
+	 */
 	public boolean withdraw()
 	{ 
 		if(state != 0) 
@@ -84,6 +103,9 @@ public abstract class Request extends Notification
 		return true;
 	}
 
+	/**
+	 * Sets the state to Accepted.
+	 */
 	public int accept()
 	{ 
 		if(state != 0) 
@@ -95,6 +117,9 @@ public abstract class Request extends Notification
 		return 0;
 	}
 
+	/**
+	 * Sets the state to Refused.
+	 */
 	public boolean refuse()
 	{ 
 		if(state != 0) 
@@ -105,6 +130,6 @@ public abstract class Request extends Notification
 		DB_UPDATE();
 		return true;
 	}
-	
+
 	public DateTime getLastStateChangeDate(){ return new DateTime(lastStateChangeDate); }
 }

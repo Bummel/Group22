@@ -3,6 +3,9 @@ package gmb.model;
 import java.io.UnsupportedEncodingException;
 import org.salespointframework.core.user.UserIdentifier;
 
+/**
+ * A decoder class.
+ */
 public class GmbDecoder {
 
 		private static byte[] bytes = null;

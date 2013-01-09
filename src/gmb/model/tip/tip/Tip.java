@@ -38,11 +38,18 @@ public abstract class Tip extends PersiObjectSingleTable
 	@Temporal(value = TemporalType.TIMESTAMP)
 	protected Date submissionDate;
 
+	/**
+	 * The draw this tip has been submitted to.
+	 */
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="DRAW_PERSISTENCEID")
 	@JoinFetch(JoinFetchType.INNER)
 	protected Draw draw;
 	
+	/**
+	 * If this Tip is a GroupTip type overallWinnings holds the sum of all winnings associated with this GroupTip if any.<br>
+	 * If this Tip is a SingleTip type overallWinnings simply holds the winnings associated with this SingleTip if any.
+	 */
 	@OneToOne
 	@PrimaryKeyJoinColumn(name="TIP_PERSISTENCEID")
 	protected Winnings overallWinnings;

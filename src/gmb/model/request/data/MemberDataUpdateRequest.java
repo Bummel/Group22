@@ -37,6 +37,7 @@ public class MemberDataUpdateRequest extends Request
 	
 	/**
 	 * [Intended for direct usage by controller]<br>
+	 * Sets the state to Accepted and updates the members' memberData.
 	 * @return return code:
 	 * <ul>
 	 * <li> 0 - successful

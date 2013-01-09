@@ -10,6 +10,11 @@ import java.util.LinkedList;
  */
 public class ArrayListFac 
 {
+	/**
+	 * Creates a CDecimal ArrayList and initializes each element with CDecimal(0).
+	 * @param element_count The size of the ArrayList
+	 * @return The created ArrayList.
+	 */
 	public static ArrayList<CDecimal> new_CDecimalArray(int element_count)
 	{
 		ArrayList<CDecimal> array = new ArrayList<CDecimal>(element_count);
@@ -20,6 +25,11 @@ public class ArrayListFac
 		return array;
 	}
 	
+	/**
+	 * Creates a LinkedList<SingleTip> ArrayList and initializes each element with a new LinkedList<SingleTip>.
+	 * @param element_count The size of the ArrayList
+	 * @return The created ArrayList.
+	 */
 	public static ArrayList<LinkedList<SingleTip>> new_SingleTipLinkedListArray(int element_count)
 	{
 		ArrayList<LinkedList<SingleTip>> array = new ArrayList<LinkedList<SingleTip>>(element_count);

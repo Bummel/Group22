@@ -15,9 +15,21 @@ public class ReceiptsDistribution extends PersiObject
 	@OneToOne
 	protected FinancialManagement financialManagementId;
 	
+	/**
+	 * The percentual amount the respective category receives from the overall stake.
+	 */
 	protected int winnersDue;
+	/**
+	 * The percentual amount the respective category receives from the overall stake.
+	 */
 	protected int treasuryDue;
+	/**
+	 * The percentual amount the respective category receives from the overall stake.
+	 */
 	protected int lotteryTaxDue;
+	/**
+	 * The percentual amount the respective category receives from the overall stake.
+	 */
 	protected int managementDue;
 	
 	@Deprecated

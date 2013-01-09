@@ -20,11 +20,14 @@ public class GroupAdminRightsTransfereOffering extends GroupRequest
 	}
 
 	/**
-	 * [intended for direct usage by controller]
-	 * Return codes:
-	 * 0 - successful
-	 * 1 - failed because state was not "UNHANDLED"
-	 * 2 - failed because "member" is not in "group"'s list of members
+	 * [Intended for direct usage by controller]<br>
+	 * Sets the state to Accepted and sets the new grouAdmin.
+	 * @return return code:
+	 * <ul>
+	 * <li> 0 - successful
+	 * <li> 1 - failed because state was not "Unhandled"
+	 * <li> 2 - failed because "member" is not in the group's list of members
+	 * </ul>
 	 */
 	public int accept()
 	{

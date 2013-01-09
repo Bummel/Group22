@@ -103,8 +103,8 @@ public class LotteryBankAccount extends PersiObject
 	 * Returns 1 (var1) if the "transaction" is invalid which is the case when the customer tries <br>
 	 * to transact more money to his real account than he is capable to based on his "LotteryBankAccount"'s "credit", <br>
 	 * otherwise 0 (var1). Also returns the created request (var2).
+	 * @param amount
 	 * @param note
-	 * @param updatedData
 	 * @return {@link ReturnBox} with:<br>
 	 * var1 as {@link Integer}: <br>
 	 * <ul>

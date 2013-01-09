@@ -27,7 +27,6 @@ public class ExternalTransaction extends Transaction
 	 * Initializes an "ExternalTransaction".<br>
 	 * A reference to the "ExternalTransaction" will be added to the "FinancialManagement"'s list and the "affectedCustomer"'s list.<br>
 	 * The "credit" of the "affectedCustomer"'s "LotterybankAccount" will be updated.
-	 * @param transaction
 	 */
 	public void init()
 	{

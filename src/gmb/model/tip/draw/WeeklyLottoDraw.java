@@ -37,8 +37,6 @@ import javax.persistence.*;
 @Entity
 public class WeeklyLottoDraw extends Draw
 {
-
-	
 	protected static final int categoryCount = 8;
 	
 	@Deprecated
@@ -48,8 +46,9 @@ public class WeeklyLottoDraw extends Draw
 	{
 		super(planedEvaluationDate);
 	}
+	
 	/**
-	 * Automatically create SingleTips from PermaTipTickets.
+	 * Automatically createss SingleTips from PermaTipTickets.
 	 */
 	public void createSingleTipsfromPermaTTs(){
 	for(Member customer : Lottery.getInstance().getMemberManagement().getMembers())
@@ -286,8 +285,7 @@ public class WeeklyLottoDraw extends Draw
 
 	/**
 	 * [Intended for direct usage by controller]<br>
-	 * Returns true if there is still time to (un-)submit tips, otherwise false.
-	 * @return
+	 * @return True if there is still time to (un-)submit tips, otherwise false.
 	 */
 	public boolean isTimeLeftUntilEvaluationForSubmission()
 	{

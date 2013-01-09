@@ -18,6 +18,9 @@ public class CDecimal extends PersiObject
     protected static final RoundingMode round = RoundingMode.HALF_UP; 
     protected static final MathContext CMC = MathContext.DECIMAL128 ; 
       
+    /**
+     * The encapsulated BigDecimal used for all operations.
+     */
     @Column(precision = 10, scale = 2)  
     protected BigDecimal myAmount; 
       

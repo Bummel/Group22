@@ -24,11 +24,20 @@ import org.joda.time.DateTime;
 @Entity
 public abstract class PermaTT extends TipTicket 
 {
+	/**
+	 * If this PermaTT is supposed to create SingleTip automatically for each draw this array must be filled with a tipped result which will be used for each created SingleTip.
+	 */
 	protected int[] tip;
 	
+	/**
+	 * The SingleTips created using this PermaTT.
+	 */
 	@OneToMany(mappedBy="permaTT")
 	protected List<SingleTip> tips;
 
+	/**
+	 * An integer encoding the duration type: 0-Month, 1-Halfyear, 2-Year
+	 */
 	protected int durationType;	
 	protected final static long millisecondsOfDay = 1000*60*60*24;
 
@@ -84,9 +93,15 @@ public abstract class PermaTT extends TipTicket
 		return durationDate;
 	}
 
+	/**
+	 * Removes a SingleTip from the list of created tips.
+	 * @param tip The tip to be removed.
+	 */
 	public boolean removeTip(SingleTip tip)
 	{
 		boolean result = this.tips.remove(tip);
+		remainingValue = remainingValue.add(perTicketPaidPurchasePrice);
+		
 		DB_UPDATE(); 
 		
 		return result;
@@ -95,7 +110,12 @@ public abstract class PermaTT extends TipTicket
 	/**
 	 * Adds the tip to the "tips" list if the ticket's duration hasn't been expired.
 	 * @param tip
-	 * @return
+	 * @return Return code:<br>
+	 * <ul>
+	 * <li> 0 - successful
+	 * <li>-1 - the duration of this ticket has been expired
+	 * <li> 2 - this ticket already contains the tip
+	 * <ul>
 	 */
 	protected int addTip(SingleTip tip, Class<?> tipType)
 	{ 
@@ -135,7 +155,7 @@ public abstract class PermaTT extends TipTicket
 	 * @return
 	 * <ul>
 	 * <li> 0 - successful
-	 * <li>   - check {@link WeeklyLottoPTT.validateTip(int[] tip)} and {@link DailyLottoPTT.validateTip(int[] tip)} for further failure codes
+	 * <li>   - check WeeklyLottoPTT.validateTip(int[] tip) and DailyLottoPTT.validateTip(int[] tip) for further failure codes
 	 * <ul>
 	 */
 	public int setTip(int[] tip)

@@ -13,6 +13,9 @@ import gmb.model.request.Request;
 @Entity
 public abstract class GroupRequest extends Request 
 {
+	/**
+	 * The associated group with this request.
+	 */
 	@ManyToOne
 	protected  Group group;
 	

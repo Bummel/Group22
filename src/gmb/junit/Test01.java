@@ -88,7 +88,8 @@ public class Test01
 	
 	/**
 	 * A test simulating user behavior in the system over a certain period of time.<br>
-	 * Achieves decent code coverage in the model code (on average about 70% - 80% in each code file).
+	 * Achieves decent code coverage in the model code (on average about 70% - 80% in each code file).<br>
+	 * The test does not work with JPA. So when running the test the dummy GmbPersistanceManager class at the bottom of the class file has to be used.
 	 */
 	@Test
 	public void MasterTest()

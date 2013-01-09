@@ -30,9 +30,16 @@ public abstract class SingleTip extends Tip
 	@ManyToOne
 	protected PermaTT permaTT;
 
+	/**
+	 * The TipTicket this SingleTip has been created from.
+	 */
 	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="TIPTICKET_PERSISTENCEID")
 	protected TipTicket tipTicket;
+	
+	/**
+	 * The associated GroupTip if this SingleTip is a contribution to a GroupTip.
+	 */
 	@ManyToOne
 	protected GroupTip groupTip;
 	
@@ -131,7 +138,7 @@ public abstract class SingleTip extends Tip
 	 * <ul>
 	 * <li> 0 - successful
 	 * <li>-2 - not enough time left until the planned evaluation of the draw
-	 * <li>   - check {@link WeeklyLottoTip.validateTip(int[] tip)} and {@link DailyLottoTip.validateTip(int[] tip)} for further failure codes
+	 * <li>   - check {@link WeeklyLottoTip}.validateTip(int[] tip) and {@link DailyLottoTip}.validateTip(int[] tip) for further failure codes
 	 * <ul>
 	 */
 	public int setTip(int[] tip)

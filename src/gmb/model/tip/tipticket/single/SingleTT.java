@@ -18,6 +18,9 @@ import javax.persistence.OneToOne;
 @Entity
 public abstract class SingleTT extends TipTicket
 {	
+	/**
+	 * The SingleTip created using this SingleTT.
+	 */
 	@OneToOne(mappedBy="tipTicket",fetch=FetchType.EAGER)
 	protected SingleTip tip;
 

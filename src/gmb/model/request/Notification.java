@@ -21,9 +21,15 @@ import javax.persistence.TemporalType;
 @Entity
 public class Notification extends PersiObject
 {	
+	/**
+	 * The receiver.
+	 */
 	@ManyToOne(fetch=FetchType.LAZY)
 	protected Member member;
 	
+	/**
+	 * The notification text.
+	 */
 	protected String note;
 	
 	@Temporal(value = TemporalType.TIMESTAMP)

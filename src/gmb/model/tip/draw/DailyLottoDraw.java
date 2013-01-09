@@ -37,25 +37,24 @@ import org.joda.time.DateTime;
 @Entity
 public class DailyLottoDraw extends Draw 
 {
-	
-	
 	@Deprecated
 	protected DailyLottoDraw(){}
 
 	public DailyLottoDraw(DateTime planedEvaluationDate)
 	{
 		super(planedEvaluationDate);
-		
+
 	}
-/**
- * Automatically create SingleTips from PermaTTs
- */
+	
+	/**
+	 * Automatically creates SingleTips from PermaTTs.
+	 */
 	public void createSingleTipsfromPermaTTs(){
-	for(Member customer : Lottery.getInstance().getMemberManagement().getMembers())
-		if(customer.getType() == MemberType.Customer)
-			for(DailyLottoPTT ticket : ((Customer)customer).getDailyLottoPTTs())
-				if(!ticket.isExpired() && ticket.getTip() != null)
-					this.createAndSubmitSingleTip(ticket, ticket.getTip());
+		for(Member customer : Lottery.getInstance().getMemberManagement().getMembers())
+			if(customer.getType() == MemberType.Customer)
+				for(DailyLottoPTT ticket : ((Customer)customer).getDailyLottoPTTs())
+					if(!ticket.isExpired() && ticket.getTip() != null)
+						this.createAndSubmitSingleTip(ticket, ticket.getTip());
 	}
 	/**
 	 * [Intended for direct usage by controller]<br>
@@ -66,24 +65,24 @@ public class DailyLottoDraw extends Draw
 	{
 		if(evaluated) return false;
 		evaluated = true;
-		
+
 		//generate random result if no result has been set:
 		if(this.result == null && result == null)
 		{
 			result = new int[10];
-			
+
 			for(int i = 0; i < 10; ++i)
 				result[i] = (int)((Math.random() * 100000) % 10);
 		}
-		
+
 		assert this.result != null || result.length == 10 : "Wrong result length (!=10) given to DailyLottoDraw.evaluate(int[] result)!";
-		
+
 		//withdraw all not submitted GroupTips associated with this draw:
 		for(Group group : Lottery.getInstance().getGroupManagement().getGroups())
 			for(DailyLottoGroupTip tip : group.getDailyLottoGroupTips())
 				if(!tip.isSubmitted() && tip.getDraw() == this)
 					tip.withdraw();
-		
+
 		drawEvaluationResult = GmbFactory.new_EvaluationResult(10);
 
 		super.evaluate(result);//init prizePotential 
@@ -159,8 +158,7 @@ public class DailyLottoDraw extends Draw
 
 	/**
 	 * [Intended for direct usage by controller]<br>
-	 * Returns true if there is still time to (un-)submit tips, otherwise false.
-	 * @return
+	 * @return True if there is still time to (un-)submit tips, otherwise false.
 	 */
 	public boolean isTimeLeftUntilEvaluationForSubmission()
 	{

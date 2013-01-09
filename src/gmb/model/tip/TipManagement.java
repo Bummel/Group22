@@ -21,10 +21,19 @@ import org.joda.time.Duration;
 @Entity
 public class TipManagement extends PersiObject
 {
+	/**
+	 * A list of all WeeklyLottoDrawings.
+	 */
 	@OneToMany(mappedBy="tipManagementId")
 	protected List<WeeklyLottoDraw> weeklyLottoDrawings;
+	/**
+	 * A list of all DailyLottoDrawings.
+	 */
 	@OneToMany(mappedBy="tipManagementId")
 	protected List<DailyLottoDraw> dailyLottoDrawings;
+	/**
+	 * A list of all TotoEvaluations.
+	 */
 	@OneToMany(mappedBy="tipManagementId")
 	protected List<TotoEvaluation> totoEvaluations;
 	

@@ -36,7 +36,7 @@ public class TicketPurchase extends InternalTransaction
 	 * A reference to the transaction will be added to the FinancialManagement and the affected user.<br>
 	 * The credit of the customer will be updated.<br>
 	 * The credit and prize amount of the lottery will be updated.<br>
-	 * @param transaction
+	 * @param ticket The purchased ticket.
 	 */
 	public TicketPurchase(TipTicket ticket)
 	{

@@ -23,12 +23,21 @@ import javax.persistence.FetchType;
 @Entity
 public class PrizeCategories extends PersiObject
 {	
+	/**
+	 * The initial percentual amount each prize category receives from the overall stake. 
+	 */
 	@ElementCollection(fetch=FetchType.EAGER)
 	@AttributeOverride(name="myAmount", column= @Column(name="weeklyLottoCategories",precision = 10, scale = 2))
 	protected List<CDecimal> weeklyLottoCategories;
+	/**
+	 * The winnings in each prize category.
+	 */
 	@ElementCollection
 	@AttributeOverride(name="myAmount", column= @Column(name="dailyLottoCategories",precision = 10, scale = 2))
 	protected List<CDecimal> dailyLottoCategories;
+	/**
+	 * The initial percentual amount each prize category receives from the overall stake. 
+	 */
 	@ElementCollection
 	@AttributeOverride(name="myAmount", column= @Column(name="totoCategories",precision = 10, scale = 2))
 	protected List<CDecimal> totoCategories;

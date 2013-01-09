@@ -37,9 +37,17 @@ public abstract class GroupTip extends Tip
 	protected Group group;
 	protected boolean submitted;
 
+	/**
+	 * The minimum amount of SingleTips a groupMember has to contribute to this GroupTip if he wants to participate.
+	 */
 	protected int minimumStake;
+	/**
+	 * The overall minimum amount of SingleTips which has to be contributed by all participating groupMembers before this GroupTip can be submitted to the draw.
+	 */
 	protected int overallMinimumStake;
-
+	/**
+	 * The height of the overallMinimumStake at the moment.
+	 */
 	protected int currentOverallMinimumStake;
 
 	@OneToOne
@@ -48,7 +56,10 @@ public abstract class GroupTip extends Tip
 	@OneToMany
 	@JoinColumn(name="TIP_PERSISTENCEID")
 	protected List<Winnings> allWinnings;
-	
+
+	/**
+	 * A list of all contributed SingleTips.
+	 */
 	@OneToMany(mappedBy="groupTip")
 	protected List<SingleTip> tips;
 
@@ -58,19 +69,19 @@ public abstract class GroupTip extends Tip
 	public GroupTip(Draw draw, Group group, int minimumStake, int overallMinimumStake)
 	{
 		super(draw);
-		
+
 		allWinnings = new LinkedList<Winnings>();
 		tips = new LinkedList<SingleTip>();
 		currentOverallMinimumStake = 0;
 		submitted = false;
-		
+
 		this.group = group;
 		this.minimumStake = minimumStake;
 		this.overallMinimumStake = overallMinimumStake;
 	}
 
 	/**
-	 * Calculates the overallWinnings and averageWinnings based on the "allWinnings" list <br>
+	 * Calculates the overallWinnings and averageWinnings based on the "allWinnings" list
 	 * and sends each contributer averageWinnings. <br>
 	 * @return The error caused by the divide operation is implicitly returned in the re-calculated overall amount for normalization purposes.
 	 */
@@ -79,7 +90,7 @@ public abstract class GroupTip extends Tip
 		if(allWinnings.size() > 0)
 		{
 			CDecimal overallAmount = new CDecimal(0);
-			
+
 			int highestPrizeCategory = 10;
 			for(Winnings winnings : allWinnings)
 			{
@@ -100,13 +111,13 @@ public abstract class GroupTip extends Tip
 
 			overallWinnings = GmbFactory.new_Winnings(this, averageAmount.multiply(new CDecimal(allWinnings.size())), highestPrizeCategory);
 			averageWinnings = GmbFactory.new_Winnings(this, averageAmount, -1);
-			
+
 			DB_UPDATE(); 
-			
+
 			//return overall amount with error for normalization:
 			return overallWinnings.getAmount();
 		}
-					
+
 		return new CDecimal(0);
 	}
 
@@ -123,7 +134,7 @@ public abstract class GroupTip extends Tip
 
 		return false;
 	}
-	
+
 	/**
 	 * [Intended for direct usage by controller]<br>
 	 * Submits this GroupTip to "draw" if all criteria were met.
@@ -140,9 +151,9 @@ public abstract class GroupTip extends Tip
 				draw.addTip(this);
 				submitted = true;
 				submissionDate = Lottery.getInstance().getTimer().getDateTime().toDate();
-				
+
 				DB_UPDATE(); 
-				
+
 				return true;
 			}
 
@@ -162,7 +173,7 @@ public abstract class GroupTip extends Tip
 			return false;
 	}
 
-	
+
 	/**
 	 * [Intended for direct usage by controller]<br>
 	 * 'Unsubmit's this GroupTip from "draw" if possible.
@@ -179,7 +190,7 @@ public abstract class GroupTip extends Tip
 			submitted = false;
 
 			DB_UPDATE(); 
-			
+
 			return true;
 		}
 		else
@@ -190,7 +201,8 @@ public abstract class GroupTip extends Tip
 	 * [Intended for direct usage by controller][check-method]<br>
 	 * SIMULATES: Submits tickets and tips if the amount matches the "minimumStake" criteria,
 	 * increment "currentOverallMinimumStake" by the amount of newly created tips. 
-	 * @param tips
+	 * @param tickets A list of tickets.
+	 * @param tipTips A list of tipped results.
 	 * @return return code:<br>
 	 * <ul>
 	 * <li> 0 - successful
@@ -205,25 +217,25 @@ public abstract class GroupTip extends Tip
 	{	
 		if(tickets.size() == 0 || tipTips.size() == 0 || (tickets.size() != tipTips.size())) return 5;
 		if(!(this.draw.isTimeLeftUntilEvaluationForSubmission())) return -2;
-	
+
 		int stake = getGroupMemberStake((tickets.getFirst()).getOwner());
 
 		if(tickets.size() >= minimumStake || stake != 0)
 		{				
 			ArrayList<SingleTip> cleanupList = new ArrayList<SingleTip>();
-			
+
 			//first try whether it would work:
 			for(int i = 0; i < tickets.size(); ++i)
 			{
 				SingleTip tip = this.createSingleTipSimple(tickets.get(i));
-				
+
 				int result1 = tip.setTip(tipTips.get(i));
 				if(result1 != 0) 
 				{
 					//reset changes of the try before error return:
 					for(int j = 0; j < i; ++j)
 						tickets.get(j).removeTip(cleanupList.get(j));
-					
+
 					return result1;	
 				}					
 
@@ -233,18 +245,18 @@ public abstract class GroupTip extends Tip
 					//reset changes of the try before error return:
 					for(int j = 0; j < i; ++j)
 						tickets.get(j).removeTip(cleanupList.get(j));
-					
+
 					return result2;		
 				}
-				
+
 				//prepare for cleanup:
 				cleanupList.add(tip);		
 			}
-				
+
 			//reset changes of the try:
 			for(int i = 0; i < tickets.size(); ++i)
 				tickets.get(i).removeTip(cleanupList.get(i));
-			
+
 			return 0;
 		}
 		else
@@ -255,7 +267,8 @@ public abstract class GroupTip extends Tip
 	 * [Intended for direct usage by controller]<br>
 	 * Submits tickets and tips if the amount matches the "minimumStake" criteria,
 	 * increment "currentOverallMinimumStake" by the amount of newly created tips. 
-	 * @param tips
+	 * @param tickets A list of tickets.
+	 * @param tipTips A list of tipped results.
 	 * @return {@link ReturnBox} with:<br>
 	 * var1 as {@link Integer}: <br>
 	 * <ul>
@@ -295,10 +308,10 @@ public abstract class GroupTip extends Tip
 
 		return new ReturnBox<Integer, LinkedList<SingleTip>>(new Integer(0), newTips);
 	}
-	
+
 	protected abstract SingleTip createSingleTipSimple(TipTicket ticket);
 	protected abstract SingleTip createSingleTipPersistent(TipTicket ticket);
-	
+
 	/**
 	 * [check-method]<br>
 	 * SIMULATES: Removes a single tip if possible.<br>
@@ -327,13 +340,13 @@ public abstract class GroupTip extends Tip
 				if(!check_unsubmit())
 					return 2;
 			}
-			
+
 			return 0;
 		}
 		else
 			return 1;
 	}
-	
+
 	/**
 	 * Removes a single tip if possible.<br>
 	 * This can lead to annulment of the submission of this group tip.<br>
@@ -367,7 +380,7 @@ public abstract class GroupTip extends Tip
 			--currentOverallMinimumStake;
 
 			DB_UPDATE(); 
-			
+
 			return 0;
 		}
 		else
@@ -396,10 +409,10 @@ public abstract class GroupTip extends Tip
 			if(!check_unsubmit())
 				return -2;			
 		}
-		
+
 		return 0;
 	}
-	
+
 	/**
 	 * [Intended for direct usage by controller]<br>
 	 * Removes all tips associated with "groupMember" if possible, can lead to annulment of the submission.
@@ -430,7 +443,7 @@ public abstract class GroupTip extends Tip
 		currentOverallMinimumStake -= stake;
 
 		DB_UPDATE(); 
-		
+
 		return 0;
 	}
 
@@ -438,7 +451,7 @@ public abstract class GroupTip extends Tip
 	 * [Intended for direct usage by controller]<br>
 	 * Returns a list of all "SingleTips" the "groupMember" contributed to the "GroupTip".
 	 * @param groupMember
-	 * @return
+	 * @return The created list.
 	 */
 	public LinkedList<SingleTip> getAllTipsOfGroupMember(Customer groupMember)
 	{
@@ -449,15 +462,15 @@ public abstract class GroupTip extends Tip
 			if(tip.getTipTicket().getOwner() == groupMember)
 				memberTips.add(tip);
 		}
-		
+
 		return memberTips;
 	}
-	
+
 	/**
 	 * [Intended for direct usage by controller]<br>
 	 * Returns the count of all "SingleTips" the "groupMember" contributed to the "GroupTip".
 	 * @param groupMember
-	 * @return
+	 * @return The stake associated with the groupMember.
 	 */
 	public int getGroupMemberStake(Customer groupMember)
 	{
@@ -484,7 +497,7 @@ public abstract class GroupTip extends Tip
 		else
 			return 2;
 	}
-	
+
 	/**
 	 * [Intended for direct usage by controller]<br>
 	 * Tries to delete this "GroupTip" with all implications.
@@ -505,14 +518,14 @@ public abstract class GroupTip extends Tip
 			tips.clear();//not really necessary
 
 			DB_UPDATE(); 
-			
+
 			return 0;
 		}
 		else
 			return 2;
 	}
 
-//	public void setAverageWinnings(Winnings averageWinnings){ this.averageWinnings = averageWinnings; DB_UPDATE(); }
+	//	public void setAverageWinnings(Winnings averageWinnings){ this.averageWinnings = averageWinnings; DB_UPDATE(); }
 	public void addWinnings(Winnings winnings){ this.allWinnings.add(winnings); DB_UPDATE(); }
 
 	public Winnings getAverageWinnings(){ return averageWinnings; }	

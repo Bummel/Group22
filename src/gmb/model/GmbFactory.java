@@ -279,7 +279,7 @@ public class GmbFactory
 	 * [Intended for direct usage by controller]<br>
 	 * Creates and purchases a tip ticket. <br>
 	 * @param customer The purchaser.
-	 * @param duration A duration of type {@link PPTDuration}.
+	 * @param duration A duration of type {@link PTTDuration}.
 	 * @return {@link ReturnBox} with:<br>
 	 * var1 as {@link Integer}: <br>
 	 * <ul>
@@ -308,7 +308,7 @@ public class GmbFactory
 	 * [Intended for direct usage by controller]<br>
 	 * Creates and purchases a tip ticket. <br>
 	 * @param customer The purchaser.
-	 * @param duration A duration of type {@link PPTDuration}.
+	 * @param duration A duration of type {@link PTTDuration}.
 	 * @return {@link ReturnBox} with:<br>
 	 * var1 as {@link Integer}: <br>
 	 * <ul>

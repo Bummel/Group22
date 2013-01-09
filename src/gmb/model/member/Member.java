@@ -35,6 +35,9 @@ import org.salespointframework.core.user.UserIdentifier;
 @Entity
 public class Member extends PersistentUser 
 {
+	/**
+	 * A flag indicating whether the account has already been activated.
+	 */
 	@Column(name="activated")
 	protected boolean activated = false;
 	@Temporal(value = TemporalType.TIMESTAMP)
@@ -46,13 +49,22 @@ public class Member extends PersistentUser
 	@OneToOne(fetch=FetchType.EAGER) 
     @JoinColumn(name="memberDataId") 
 	protected MemberData memberData;
+	/**
+	 * A list of sent MemberDataUpdateRequests.
+	 */
 	@OneToMany(mappedBy="member",fetch=FetchType.EAGER)
 	protected List<MemberDataUpdateRequest> memberDataUpdateRequest;
+	/**
+	 * A List of received notifications.
+	 */
 	@OneToMany
 	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
 	protected List<Notification> notifications;
 	
-	protected int type;//0-Employee, 1-Admin, 2-Notary, 3-Customer
+	/**
+	 * A type id for model internal usage: 0-Employee, 1-Admin, 2-Notary, 3-Customer
+	 */
+	protected int type;
 	
 	public Member DB_ADD(){ return GmbPersistenceManager.add(this); }
 	public void DB_UPDATE(){ GmbPersistenceManager.update(this); }

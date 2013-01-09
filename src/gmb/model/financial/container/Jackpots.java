@@ -19,9 +19,16 @@ import javax.persistence.Entity;
 @Entity
 public class Jackpots extends PersiObject
 {
+	/**
+	 * The credits of the individual winning categories in the jackpot.
+	 */
 	@ElementCollection
 	@AttributeOverride(name="myAmount", column= @Column(name="weeklyLottoJackpot",precision = 10, scale = 2))
 	protected List<CDecimal> weeklyLottoJackpot;
+	
+	/**
+	 * The credits of the individual winning categories in the jackpot.
+	 */
 	@ElementCollection
 	@AttributeOverride(name="myAmount", column= @Column(name="totoJackpot",precision = 10, scale = 2))
 	protected List<CDecimal> totoJackpot;

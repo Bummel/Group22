@@ -43,12 +43,18 @@ public abstract class TipTicket extends PersiObjectSingleTable implements  Gener
 	@Embedded
 	@AttributeOverride(name="myAmount", column= @Column(name="paidPurchasePrice", precision = 10, scale = 2))
 	protected CDecimal paidPurchasePrice;
+	/**
+	 * The price of the corresponding SingleTT (the same like paidPurchasePrice for SingleTTs of course)
+	 */
 	@Embedded
 	@AttributeOverride(name="myAmount", column= @Column(name="perTicketPaidPurchasePrice", precision = 10, scale = 2))
-	protected CDecimal perTicketPaidPurchasePrice;//the price of the corresponding SingleTT (the same like paidPurchasePrice for SingleTTs of course)
+	protected CDecimal perTicketPaidPurchasePrice;
+	/**
+	 * This is decremented by perTicketPaidPurchasePrice for each submitted SingleTip. In the case of PermaTTs the treasury has to pay as soon this one goes under 0 to account the discount of PermaTTs.
+	 */
 	@Embedded
 	@AttributeOverride(name="myAmount", column= @Column(name="remainingValue", precision = 10, scale = 2))
-	protected CDecimal remainingValue;//decrement this by perTicketPaidPurchasePrice for each submitted tip (in the case of PermaTTs the treasury has to pay as soon this one goes under 0)
+	protected CDecimal remainingValue;
 	
 	@OneToOne
 	protected TicketPurchase ticketPurchaseId;
@@ -62,11 +68,11 @@ public abstract class TipTicket extends PersiObjectSingleTable implements  Gener
 	public TipTicket(){}
 
 	/**
-	 * If the "customer" has enough money a "TicketPurchase" instance will be created, the "TipTicket"<br>
+	 * If the "customer" has enough money a "TicketPurchase" instance will be created, the "TipTicket"
 	 * will be added to the "customers" list and "true" will be returned, otherwise "false".<br>
 	 * Also the actually paid price will be saved in "paidPurchasePrice".
 	 * @param customer
-	 * @return
+	 * @return False if the customer does not have enough money for the purchase, otherwise true.
 	 */
 	public boolean purchase(Customer customer)
 	{	
@@ -117,13 +123,15 @@ public abstract class TipTicket extends PersiObjectSingleTable implements  Gener
 	public CDecimal getPaidPurchasePrice(){ return paidPurchasePrice; }	
 	
 	/**
-	 * Return Code:<br>
-	 * 0 - successful<br>
-	 *-1 - the duration of the "PermaTT" has expired<br>
-	 * 1 - the "SingleTT" is already associated with another "SingleTip"<br>
-	 * 2 - the list of the "PermaTT" already contains the "tip"
 	 * @param tip
 	 * @return
+	 * Return Code:<br>
+	 * <ul>
+	 * <li> 0 - successful<br>
+	 * <li>-1 - the duration of the "PermaTT" has expired<br>
+	 * <li> 1 - the "SingleTT" is already associated with another "SingleTip"<br>
+	 * <li> 2 - the list of the "PermaTT" already contains the "tip"
+	 * </ul>
 	 */
 	public abstract int addTip(SingleTip tip);
 	

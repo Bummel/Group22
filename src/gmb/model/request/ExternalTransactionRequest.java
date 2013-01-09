@@ -39,10 +39,13 @@ public class ExternalTransactionRequest extends Request
 	}
 	
 	/**
-	 * [intended for direct usage by controller]
-	 * Return code:
-	 * 0 - successful
-	 * 1 - failed because state was not "UNHANDLED"
+	 * [Intended for direct usage by controller]<br>
+	 * Sets the state to Accepted and initializes the transaction.
+	 * @return Return code:<br>
+	 * <ul>
+	 * <li>0 - successful
+	 * <li>1 - failed because state was not "UNHANDLED"
+	 * </ul>
 	 */
 	public int accept()
 	{

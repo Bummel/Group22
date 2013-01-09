@@ -55,9 +55,14 @@ public abstract class Draw extends PersiObjectSingleTable
 	@Temporal(value = TemporalType.TIMESTAMP)
 	protected Date planedEvaluationDate;	
 
-	//temporary variables used for evaluation:
+	/**
+	 * Temporary variable used for evaluation.
+	 */
 	@Transient
 	protected CDecimal prizePotential;//temp
+	/**
+	 * Temporary variable used for evaluation.
+	 */
 	@Transient
 	protected List<SingleTip> allSingleTips;//temp
 
@@ -225,8 +230,7 @@ public abstract class Draw extends PersiObjectSingleTable
 	
 	/**
 	 * [Intended for direct usage by controller]<br>
-	 * Returns true if there is still time to change tips, otherwise false.
-	 * @return
+	 * @return true if there is still time to change tips, otherwise false.
 	 */
 	public boolean isTimeLeftUntilEvaluationForChanges()
 	{
@@ -237,35 +241,30 @@ public abstract class Draw extends PersiObjectSingleTable
 	/**
 	 * [Intended for direct usage by controller]<br>
 	 * Returns true if there is still time to (un-)submit tips, otherwise false.
-	 * @return
 	 */
 	public abstract boolean isTimeLeftUntilEvaluationForSubmission();
 	
 	/**
-	 * submits the tip if there is enough time left till the planned evaluation and returns true if so, otherwise false
+	 * Submits the tip if there is enough time left till the planned evaluation and returns true if so, otherwise false
 	 * @param tip
-	 * @return
 	 */
 	public abstract boolean addTip(SingleTip tip);
 
 	/**
-	 * submits the tip if there is enough time left till the planned evaluation and returns true if so, otherwise false
+	 * Submits the tip if there is enough time left till the planned evaluation and returns true if so, otherwise false
 	 * @param tip
-	 * @return
 	 */
 	public abstract boolean addTip(GroupTip tip);
 
 	/**
-	 * removes the tip if there is enough time left till the planned evaluation and returns true if so, otherwise false
+	 * Removes the tip if there is enough time left till the planned evaluation and returns true if so, otherwise false
 	 * @param tip
-	 * @return
 	 */
 	public abstract boolean removeTip(SingleTip tip);
 
 	/**
-	 * removes the tip if there is enough time left till the planned evaluation and returns true if so, otherwise false
+	 * Removes the tip if there is enough time left till the planned evaluation and returns true if so, otherwise false
 	 * @param tip
-	 * @return
 	 */
 	public abstract boolean removeTip(GroupTip tip);
 
@@ -346,14 +345,4 @@ public abstract class Draw extends PersiObjectSingleTable
 	public DateTime getActualEvaluationDate(){ return new DateTime(drawEvaluationResult.getEvaluationDate()); }
 
 	public int[] getResult(){ return result; }
-	
-	/**
-	 * [intended for direct usage by controller]
-	 * Sets the drawn results for this draw type. 
-	 * Has to be done before evaluation.
-	 * @param result
-	 */
-//	public abstract void setResult(int[] result);
-	
-
 }

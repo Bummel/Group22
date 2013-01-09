@@ -50,17 +50,33 @@ public class FinancialManagement extends PersiObject
 	@JoinColumn(name="RECEIPTSDISTRIBUTION_PERSISTENCEID")
 	protected ReceiptsDistribution receiptsDistribution;
 
+	/**
+	 * A list of all ticket purchases transacted in the system.
+	 */
 	@OneToMany
 	protected List<TicketPurchase> ticketPurchases;
 
+	/**
+	 * A list of all winnings.
+	 */
 	@OneToMany
 	protected List<Winnings> winnings;
 
+	/**
+	 * A list of all external transactions transacted in the system.
+	 */
 	@OneToMany
 	protected List<ExternalTransaction> externalTransactions;
 
+	/**
+	 * A list of all external transaction requests transacted in the system.
+	 */
 	@OneToMany(mappedBy="financialManagementId")
 	protected List<ExternalTransactionRequest> externalTransactionRequests;	
+	
+	/**
+	 * A list of all real account data update requests transacted in the system.
+	 */
 	@OneToMany
 	protected List<RealAccountDataUpdateRequest> realAccounDataUpdateRequests;
 

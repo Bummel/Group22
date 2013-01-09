@@ -18,15 +18,27 @@ import javax.persistence.Entity;
 @Entity
 public class ReceiptsDistributionResult extends PersiObject
 {	
+	/**
+	 * The amount the respective category received from the overall stake.
+	 */
 	@Embedded
 	@AttributeOverride(name="myAmount", column= @Column(name="winnersDue",precision = 10, scale = 2))
 	protected CDecimal winnersDue;
+	/**
+	 * The amount the respective category received from the overall stake.
+	 */
 	@Embedded
 	@AttributeOverride(name="myAmount", column= @Column(name="treasuryDue",precision = 10, scale = 2))
 	protected CDecimal treasuryDue;
+	/**
+	 * The amount the respective category received from the overall stake.
+	 */
 	@Embedded
 	@AttributeOverride(name="myAmount", column= @Column(name="lotteryTaxDue",precision = 10, scale = 2))
 	protected CDecimal lotteryTaxDue;
+	/**
+	 * The amount the respective category received from the overall stake.
+	 */
 	@Embedded
 	@AttributeOverride(name="myAmount", column= @Column(name="managementDue",precision = 10, scale = 2))
 	protected CDecimal managementDue;

@@ -17,9 +17,15 @@ import javax.persistence.OneToMany;
 @Entity
 public class MemberManagement extends PersiObject
 {
+	/**
+	 * A list of all members.
+	 */
 	@OneToMany(mappedBy="memberManagement",fetch=FetchType.EAGER)
 	@JoinColumn(name="MEMBERMANAGEMENT_PERSISTENCEID")
 	protected List<Member> members;
+	/**
+	 * A list of all MemberDataUpdateRequests.
+	 */
 	@OneToMany(mappedBy="memberManagementID",fetch=FetchType.EAGER)
 	@JoinColumn(name="MEMBERMANAGEMENTID")
 	protected List<MemberDataUpdateRequest> requests;
