@@ -1098,6 +1098,56 @@ public class Test01
 		Lottery.getInstance().getTimer().resetTotoEvaluatioAutoEvaluation();
 		
 		printCurrentTimeToConsol("Withdrawing of group tips has been tested.");//<------------------------------------------------------------------<TIMELINE UPDATE>
+		//=========================================================================================================================//PERMA-STUFF RETURNS:
+		
+		Lottery.getInstance().getTimer().addDays(3);//<------------------------------------------------------------------------------------------------[TIME SIMULATION]
+		
+		int dLDCount = Lottery.getInstance().getTipManagement().getDailyLottoDrawings().size();
+		
+		Lottery.getInstance().getTimer().setDailyLottoDrawAutoCreation();
+		Lottery.getInstance().getTimer().setDailyLottoDrawAutoEvaluation();
+		
+		Lottery.getInstance().getTimer().addYears(3);//<------------------------------------------------------------------------------------------------[TIME SIMULATION]
+		
+		assertEquals(dLDCount, Lottery.getInstance().getTipManagement().getDailyLottoDrawings().size());
+		
+		DailyLottoPTT cus3DPPT03 = GmbFactory.createAndPurchase_DailyLottoPTT(cus3, PTTDuration.Month).var2;
+		assertEquals(0, cus3DPPT03.setTip(new int[]{0,1,2,0,4,5,6,7,8,9}));
+		
+		DateTime currentDate = Lottery.getInstance().getTimer().getDateTime();
+		
+		DailyLottoDraw DLDrawX03 = GmbFactory.new_DailyLottoDraw(Lottery.getInstance().getTimer().getDateTime().plusDays(1));
+		
+		Lottery.getInstance().getTimer().addDays(7);//<------------------------------------------------------------------------------------------------[TIME SIMULATION]
+		
+		assertEquals(7, Lottery.getInstance().getTipManagement().getDailyLottoDrawings().size() - dLDCount);
+		
+		assertEquals(true, cus3.getDailyLottoPTTs().contains(cus3DPPT03));
+		assertEquals(false, cus3DPPT03.isExpired());
+		assertNotNull(cus3DPPT03.getTip());
+		
+		int notEval = 0;
+		int loopID = 0;
+		for(DailyLottoDraw draw : Lottery.getInstance().getTipManagement().getDailyLottoDrawings())
+			if(draw.getPlanedEvaluationDate().isAfter(currentDate))
+			{
+				System.out.println(loopID);
+				
+				if(!draw.isEvaluated())
+					++notEval;
+				else
+					assertEquals(1, draw.getSingleTips().size());			
+				
+				++loopID;
+			}
+		
+		System.out.println("notEval: " + notEval);
+		assertEquals(1, notEval);
+		
+		Lottery.getInstance().getTimer().resetDailyLottoDrawAutoCreation();
+		Lottery.getInstance().getTimer().resetDailyLottoDrawAutoEvaluation();
+		
+		printCurrentTimeToConsol("Automatic creation of DailyLottoTips has been tested (again).");//<------------------------------------------------------------------<TIMELINE UPDATE>
 	}
 
 	//	@Test(expected=AssertionError.class)

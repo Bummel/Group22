@@ -164,7 +164,7 @@ public abstract class SingleTip extends Tip
 	 */
 	public int validateTip(int[] tip2)
 	{
-		if(draw.isTimeLeftUntilEvaluationForChanges())
+		if(draw.isTimeLeftUntilEvaluationForChanges() || isAutomaticallyCreatedTip())
 			return 0;
 		else
 			return -2;
@@ -175,5 +175,6 @@ public abstract class SingleTip extends Tip
 	public TipTicket getTipTicket(){ return tipTicket; }
 	public GroupTip getGroupTip(){ return groupTip; }
 	
+	public boolean isAutomaticallyCreatedTip(){ return (getTipTicket() instanceof PermaTT ) && (((PermaTT)getTipTicket()).getTip() != null); }
 //	public Customer getOwner(){ return tipTicket.getOwner(); }
 }

@@ -48,7 +48,7 @@ public class WeeklyLottoDraw extends Draw
 	}
 	
 	/**
-	 * Automatically createss SingleTips from PermaTipTickets.
+	 * Automatically creates SingleTips from PermaTipTickets.
 	 */
 	public void createSingleTipsfromPermaTTs(){
 	for(Member customer : Lottery.getInstance().getMemberManagement().getMembers())

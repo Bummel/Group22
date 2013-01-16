@@ -10,6 +10,7 @@ import gmb.model.tip.draw.container.EvaluationResult;
 import gmb.model.tip.tip.group.GroupTip;
 import gmb.model.tip.tip.single.SingleTip;
 import gmb.model.tip.tipticket.TipTicket;
+import gmb.model.tip.tipticket.perma.PermaTT;
 
 import gmb.model.CDecimal;
 
@@ -274,7 +275,7 @@ public abstract class Draw extends PersiObjectSingleTable
 	{ 		
 		assert tip.getClass() == tipType : "Wrong type given to Draw.addTip(SingleTip tip)! Expected: " + tipType.getSimpleName() + " !";
 		
-		if(isTimeLeftUntilEvaluationForSubmission())
+		if(isTimeLeftUntilEvaluationForSubmission() || tip.isAutomaticallyCreatedTip())
 		{
 			singleTips.add(tip); 
 			DB_UPDATE(); 
@@ -304,7 +305,7 @@ public abstract class Draw extends PersiObjectSingleTable
 	{ 	
 		assert tip.getClass() == tipType : "Wrong type given to Draw.removeTip(SingleTip tip)! Expected: " + tipType.getSimpleName() + " !";
 
-		if(isTimeLeftUntilEvaluationForSubmission())
+		if(isTimeLeftUntilEvaluationForSubmission() || tip.isAutomaticallyCreatedTip())
 		{
 			boolean result = singleTips.remove(tip);
 			GmbPersistenceManager.remove(tip);
